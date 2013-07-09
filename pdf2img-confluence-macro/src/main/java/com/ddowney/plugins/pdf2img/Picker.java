@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
 import com.atlassian.confluence.pages.AttachmentManager;
@@ -28,6 +31,7 @@ import com.atlassian.confluence.spaces.SpaceManager;
  */
 public class Picker {
 
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	private PageManager pageManager;
 	private AttachmentManager attachmentManager;
 	private SpaceManager spaceManager;
@@ -76,7 +80,7 @@ public class Picker {
 	/*
 	 * Return a filtered list of attachments, ie. should only contain pdfs.
 	 */
-	private List<Attachment> filterAttachments(List<Attachment> att){
+	public List<Attachment> filterAttachments(List<Attachment> att){
 		List<Attachment> filteredList = new ArrayList<Attachment>();
 		Set<String> compare = new TreeSet<String>(new StringComparator());
 			
@@ -114,7 +118,7 @@ public class Picker {
     	return attachMap;
     }
 	
-	public void convert(Map<Page, List<Attachment>> attachMap, double dimensions) throws IOException, AttachmentDataExistsException{
+	public boolean convert(Map<Page, List<Attachment>> attachMap) throws IOException, AttachmentDataExistsException{
 		Generator gen = new Generator(attachmentManager);
 		Iterator<Page> it = attachMap.keySet().iterator();
 		
@@ -124,11 +128,15 @@ public class Picker {
 			//loop through the attachments attached to current page
 			for(Attachment a : attachments){
 				InputStream in = attachmentManager.getAttachmentData(a); //get attachments data
-				Attachment attach = gen.createImage(in, a.getFileName(), dimensions); //create an image using data, assign to new attachment
+				Attachment attach = gen.createImage(in, a.getFileName()); //create an image using data, assign to new attachment
 				attachmentManager.saveAttachment(attach, null, in); //save attachment
 				page.addAttachment(attach); //attach saved attachment to current page
+				if(attach.getContent() != page){
+					return false;
+				}
 			}
-		}	
+		}
+		return true;
 	}
 	
 	public class StringComparator implements Comparator<String>{

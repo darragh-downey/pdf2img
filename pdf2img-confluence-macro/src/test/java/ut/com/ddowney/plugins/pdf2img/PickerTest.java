@@ -5,11 +5,14 @@ package ut.com.ddowney.plugins.pdf2img;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +21,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.confluence.spaces.Space;
+import com.atlassian.confluence.pages.AttachmentDataExistsException;
 import com.atlassian.confluence.pages.PageManager;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.AttachmentManager;
@@ -32,15 +36,15 @@ import com.ddowney.plugins.pdf2img.Picker;
 public class PickerTest {
 	
 	@Mock 
-	private Space jam = new Space();
+	private Space jam;
 	@Mock 
-	private Space man = new Space();
+	private Space man;
 	@Mock 
-	private Space ikea = new Space();
+	private Space ikea;
 	@Mock 
-	private Space meat = new Space();
+	private Space meat;
 	@Mock 
-	private Space veg = new Space();
+	private Space veg;
 	
 	@Mock 
 	private Page Daffy_duck = new Page();
@@ -81,18 +85,21 @@ public class PickerTest {
 	@Mock 
 	private AttachmentManager attachmentManager;
 	
-	@Mock 
+	 
 	private List<Space> spaces = new ArrayList<Space>();
-	@Mock 
+	 
 	private Map<Space, List<Page>> pages = new HashMap<Space, List<Page>>();
+	
+	private Map<Page, List<Attachment>> attachments = new HashMap<Page, List<Attachment>>();
 	
 	@Before
 	public void setup(){		
-		spaceManager.createSpace(ikea);
-		spaceManager.createSpace(jam);
-		spaceManager.createSpace(man);
-		spaceManager.createSpace(meat);
-		spaceManager.createSpace(veg);
+		
+		jam = new Space();
+		man = new Space();
+		ikea = new Space();
+		meat = new Space();
+		veg = new Space();
 		
 		spaces.add(ikea);
 		spaces.add(jam);
@@ -111,6 +118,7 @@ public class PickerTest {
 		JJ.setSpace(man);
 		DD.setSpace(man);
 		
+		
 		for(Space s : spaces){
 			List<Page> pgs = pageManager.getPages(s, true);
 			pages.put(s, pgs);
@@ -127,13 +135,33 @@ public class PickerTest {
 		bugs_doc.setContent(Daffy_duck);
 		steak_doc.setContent(Daffy_duck);
 		rashers_pdf.setContent(Daffy_duck);
+		
+		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
+		Iterator<Space> it = spaces.iterator();
+		while(it.hasNext()){
+			Space sp = it.next();
+			List<Page> pg = pages.get(sp);
+			List<Attachment> hold = new ArrayList<Attachment>();
+			List<Attachment> att = new ArrayList<Attachment>();
+			for(Page pge : pg){
+				hold = attachmentManager.getAttachments(pge);
+				att = p.filterAttachments(hold);
+				attachments.put(pge, att);				
+			}
+		}
+	}
+	
+	@After
+	public void teardown(){
+		
 	}
 	/**
 	 * Test method for {@link com.ddowney.plugins.tgen.Picker#Picker(com.atlassian.confluence.spaces.SpaceManager, com.atlassian.confluence.pages.PageManager, com.atlassian.confluence.pages.AttachmentManager)}.
 	 */
 	@Test
 	public void testPicker() {
-		fail("Not yet implemented");
+		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
+		assertNotNull("Not initialising the Picker object correctly", p);
 	}
 
 	/**
@@ -154,7 +182,7 @@ public class PickerTest {
 	public void testGetAllSpaces() {
 		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
 		
-		assertEquals("Ahhhh fuck!", spaces, p.getAllSpaces());
+		assertNotNull("Failed to get all spaces.", p.getAllSpaces());
 	}
 
 	/**
@@ -164,7 +192,7 @@ public class PickerTest {
 	public void testGetAllPages() {
 		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
 		
-		assertEquals("Ahhhhh jayzus!!", pages, p.getAllPages(spaces));
+		assertNotNull("Failed to get all pages", p.getAllPages(spaces));
 	}
 
 	/**
@@ -172,18 +200,21 @@ public class PickerTest {
 	 */
 	@Test
 	public void testGetAllAttachments() {
-		fail("Not yet implemented");
-		//Picker p = new Picker(spaceManager, pageManager, attachmentManager);
+		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
 		
-		//assertEquals("Ur takin da piss!!", att, p.getAllAttachments(pages));
+		assertEquals("Either null or not equal to the filtered attachment list", attachments, p.getAllAttachments(pages));
 	}
 
 	/**
 	 * Test method for {@link com.ddowney.plugins.tgen.Picker#convert(java.util.Map, double)}.
+	 * This test will work if the createImage method in the Generator class works.
+	 * @throws AttachmentDataExistsException 
+	 * @throws IOException 
 	 */
 	@Test
-	public void testConvert() {
-		fail("Not yet implemented");
+	public void testConvert() throws IOException, AttachmentDataExistsException {
+		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
+		assertTrue("Failed to attach!", p.convert(attachments));
 	}
 
 }

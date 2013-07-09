@@ -14,14 +14,18 @@ import javax.imageio.ImageIO;
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
 import com.atlassian.confluence.pages.AttachmentManager;
-import com.mortennobel.imagescaling.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+//import com.mortennobel.imagescaling.*;
 import org.apache.pdfbox.pdmodel.PDDocument; //load the doc
 import org.apache.pdfbox.pdmodel.PDPage; //convert to image
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
+//import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
 public class Generator {
 	
-	private double dime = 1;
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	//private double dime = 1;
 	//private double[] sizes = {0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2}; //ranging from 25% to 200% original size.
 	private AttachmentManager attachmentManager;
 	private Attachment attachment;
@@ -62,7 +66,7 @@ public class Generator {
 	public Attachment getAttachment(){
 		return attachment;
 	}
-	
+	/*
 	private BufferedImage resampleOperation(BufferedImage buffIn, int width, int height){
 		ResampleOp resampleOp = new ResampleOp(width, height);
 		resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.Normal);
@@ -74,10 +78,10 @@ public class Generator {
 		BufferedImage buffOut = resampleOp.filter(buffIn, null);
 		return buffOut;
 	}
-	
-	public Attachment createImage(InputStream in, String name, double dimensions) throws IOException, AttachmentDataExistsException 
+	*/
+	public Attachment createImage(InputStream in, String name) throws IOException, AttachmentDataExistsException 
     {
-			dime = dimensions;
+			//dime = dimensions;
             PDDocument document = null; 
             Attachment attachment = null;
             File img = null;
@@ -97,9 +101,9 @@ public class Generator {
             while (iter.hasNext() && i < 2){
                	try{
                		PDPage page = (PDPage) iter.next();
-               		PDRectangle mediabox = page.getMediaBox();
+               		//PDRectangle mediabox = page.getMediaBox();
                		BufferedImage image = page.convertToImage();
-                		
+                	/*	
                		if(dimensions != 0 && dimensions <= 2 && dimensions > 0){
                			double width = (int)mediabox.getWidth()* dime;
         	            double height = (int)mediabox.getHeight() * dime;
@@ -115,12 +119,15 @@ public class Generator {
         	            BufferedImage rescaledImage = resampleOperation(image, (int)width, (int)height);
         	            img = new File(tokens[0]+".png");
         	            ImageIO.write(rescaledImage, "png", img);
-               		}                
+               		} 
+               		*/               
+               		img = new File(tokens[0]+".png");
+    	            ImageIO.write(image, "png", img);
                		input = new FileInputStream(img);
                		setAttachment(attachment, input);
-               		//attachment = getAttachment();
     	            i++;
                	}catch(IOException e){
+               		logger.error("Something happened!", e);
                		e.printStackTrace();
                	}finally{
                		document.close();

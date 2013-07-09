@@ -8,7 +8,11 @@ import static org.junit.Assert.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
 import com.atlassian.confluence.pages.AttachmentManager;
@@ -18,8 +22,10 @@ import com.ddowney.plugins.pdf2img.Generator;
  * @author ddowney
  *
  */
+@RunWith(MockitoJUnitRunner.class)
 public class GeneratorTest {
 	
+	@Mock
 	private AttachmentManager attachmentManager;
 	
 	/**
@@ -38,7 +44,7 @@ public class GeneratorTest {
 	public void testGetAttachmentManager() {
 		Generator gen = new Generator(attachmentManager);
 		gen.setAttachmentManager(attachmentManager);
-		assertSame("attachment manager not set!", attachmentManager, gen.getAttachmentManager());
+		assertEquals("attachment manager not set!", attachmentManager, gen.getAttachmentManager());
 	}
 
 	/**
@@ -66,7 +72,7 @@ public class GeneratorTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertNotNull("no image!!", gen.createImage(pdf, "Newsletter_Mercury_13.1.pdf", 0));
+		assertNotNull("no image!!", gen.createImage(pdf, "Newsletter_Mercury_13.1.pdf"));
 	}
 
 }
