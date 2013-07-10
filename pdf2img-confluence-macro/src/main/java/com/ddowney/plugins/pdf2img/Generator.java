@@ -24,7 +24,7 @@ import org.apache.pdfbox.pdmodel.PDPage; //convert to image
 
 public class Generator {
 	
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final static Logger genlog = LoggerFactory.getLogger(Generator.class);
 	//private double dime = 1;
 	//private double[] sizes = {0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2}; //ranging from 25% to 200% original size.
 	private AttachmentManager attachmentManager;
@@ -127,11 +127,12 @@ public class Generator {
                		setAttachment(attachment, input);
     	            i++;
                	}catch(IOException e){
-               		logger.error("Something happened!", e);
+               		genlog.error("Something happened!", e);
                		e.printStackTrace();
                	}finally{
                		document.close();
                		input.close();
+               		genlog.info("Closed streams");
                	}    
             }
             return attachment;

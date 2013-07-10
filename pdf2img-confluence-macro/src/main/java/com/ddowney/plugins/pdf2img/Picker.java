@@ -31,7 +31,7 @@ import com.atlassian.confluence.spaces.SpaceManager;
  */
 public class Picker {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final static Logger picklog = LoggerFactory.getLogger(Picker.class);
 	private PageManager pageManager;
 	private AttachmentManager attachmentManager;
 	private SpaceManager spaceManager;
@@ -132,8 +132,10 @@ public class Picker {
 				attachmentManager.saveAttachment(attach, null, in); //save attachment
 				page.addAttachment(attach); //attach saved attachment to current page
 				if(attach.getContent() != page){
+					picklog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
 					return false;
 				}
+				picklog.info("Attached %s to %s", a.getFileName(), page.getTitle());
 			}
 		}
 		return true;
