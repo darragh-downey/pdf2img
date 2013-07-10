@@ -32,6 +32,7 @@ import com.atlassian.confluence.spaces.SpaceManager;
 public class Picker {
 
 	private final static Logger picklog = LoggerFactory.getLogger(Picker.class);
+	private final static Logger imagelog = LoggerFactory.getLogger(Picker.class);
 	private PageManager pageManager;
 	private AttachmentManager attachmentManager;
 	private SpaceManager spaceManager;
@@ -118,7 +119,7 @@ public class Picker {
     	return attachMap;
     }
 	
-	public boolean convert(Map<Page, List<Attachment>> attachMap) throws IOException, AttachmentDataExistsException{
+	public boolean convert(Map<Page, List<Attachment>> attachMap){
 		Generator gen = new Generator(attachmentManager);
 		Iterator<Page> it = attachMap.keySet().iterator();
 		
@@ -128,14 +129,34 @@ public class Picker {
 			//loop through the attachments attached to current page
 			for(Attachment a : attachments){
 				InputStream in = attachmentManager.getAttachmentData(a); //get attachments data
-				Attachment attach = gen.createImage(in, a.getFileName()); //create an image using data, assign to new attachment
-				attachmentManager.saveAttachment(attach, null, in); //save attachment
+				Attachment attach = null;
+				try {
+					attach = gen.createImage(in, a.getFileName());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					picklog.error("IO Exception");
+					picklog.trace("IO Exception trace", e1);
+					e1.printStackTrace();
+				}catch (AttachmentDataExistsException e2) {
+					//create an image using data, assign to new attachment
+					picklog.error("Attachment Data Exists Exception");
+					picklog.trace("Attachment Data Exists Exception trace", e2);
+					e2.printStackTrace();
+				}
+				try {
+					attachmentManager.saveAttachment(attach, null, in);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					picklog.error("IO Exception");
+					picklog.trace("IO Exception trace", e);
+					e.printStackTrace();
+				} //save attachment
 				page.addAttachment(attach); //attach saved attachment to current page
 				if(attach.getContent() != page){
 					picklog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
 					return false;
 				}
-				picklog.info("Attached %s to %s", a.getFileName(), page.getTitle());
+				imagelog.info("Attached %s to %s", a.getFileName(), page.getTitle());
 			}
 		}
 		return true;

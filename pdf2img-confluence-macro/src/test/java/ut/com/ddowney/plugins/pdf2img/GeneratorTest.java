@@ -16,9 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
 import com.atlassian.confluence.pages.AttachmentManager;
 import com.ddowney.plugins.pdf2img.Generator;
@@ -29,8 +26,6 @@ import com.ddowney.plugins.pdf2img.Generator;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class GeneratorTest {
-	
-	private static Logger gentestlog = LoggerFactory.getLogger(GeneratorTest.class);
 	
 	@Mock
 	private AttachmentManager attachmentManager;
@@ -77,7 +72,6 @@ public class GeneratorTest {
 			pdf = new FileInputStream("C:\\Documents and Settings\\ddowney\\My Documents\\Newsletter_Mercury_13.1.pdf");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			gentestlog.error("File not found", e);
 			e.printStackTrace();
 		}
 		assertNotNull("no image!!", gen.createImage(pdf, "Newsletter_Mercury_13.1.pdf"));

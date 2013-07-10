@@ -18,9 +18,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
@@ -37,7 +34,6 @@ import com.ddowney.plugins.pdf2img.Picker;
 @RunWith (MockitoJUnitRunner.class)
 public class PickerTest {
 	
-	private static Logger picktestlog = LoggerFactory.getLogger(PickerTest.class);
 	@Mock 
 	private Space jam;
 	@Mock 
@@ -217,14 +213,7 @@ public class PickerTest {
 	@Test
 	public void testConvert() throws IOException, AttachmentDataExistsException {
 		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
-		try{
-			assertTrue("Failed to attach!", p.convert(attachments));
-		}catch(AttachmentDataExistsException e1){
-			picktestlog.error("Attachment data exists exception", e1);
-		}catch(IOException e2){
-			picktestlog.error("Attachment data exists exception", e2);
-		}
-		
+		assertTrue("Failed to attach!", p.convert(attachments));		
 	}
 
 }
