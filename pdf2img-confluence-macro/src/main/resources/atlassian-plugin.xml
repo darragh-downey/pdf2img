@@ -6,6 +6,13 @@
         <param name="plugin-icon">images/pluginIcon.png</param>
         <param name="plugin-logo">images/pluginLogo.png</param>
     </plugin-info>
+    
+    <!-- add admin console screen(?)  -->
+    <web-item key="conf-menu-item" name="XProduct Admin" section="system.admin/configuration" weight="10"> 
+	  <description>Link to xproduct-admin page.</description> 
+	  <label key="xproduct.admin.label" /> 
+	  <link linkId="xproduct-admin-link">/plugins/servlet/xproduct/admin</link> 
+	</web-item> 
 
     <!-- add our i18n resource -->
     <resource type="i18n" name="i18n" location="pdf2img-confluence-macro"/>

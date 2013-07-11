@@ -34,6 +34,7 @@ import com.ddowney.plugins.pdf2img.Picker;
 @RunWith (MockitoJUnitRunner.class)
 public class PickerTest {
 	
+	private Picker picker;
 	@Mock 
 	private Space jam;
 	@Mock 
@@ -92,7 +93,8 @@ public class PickerTest {
 	private Map<Page, List<Attachment>> attachments = new HashMap<Page, List<Attachment>>();
 	
 	@Before
-	public void setup(){		
+	public void setUp(){		
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 		
 		jam = new Space();
 		man = new Space();
@@ -135,7 +137,6 @@ public class PickerTest {
 		steak_doc.setContent(Daffy_duck);
 		rashers_pdf.setContent(Daffy_duck);
 		
-		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
 		Iterator<Space> it = spaces.iterator();
 		while(it.hasNext()){
 			Space sp = it.next();
@@ -144,23 +145,24 @@ public class PickerTest {
 			List<Attachment> att = new ArrayList<Attachment>();
 			for(Page pge : pg){
 				hold = attachmentManager.getAttachments(pge);
-				att = p.filterAttachments(hold);
+				att = picker.filterAttachments(hold);
 				attachments.put(pge, att);				
 			}
 		}
 	}
 	
 	@After
-	public void teardown(){
-		
+	public void tearDown(){
+		spaces.clear();
+		pages.clear();
+		attachments.clear();
 	}
 	/**
 	 * Test method for {@link com.ddowney.plugins.tgen.Picker#Picker(com.atlassian.confluence.spaces.SpaceManager, com.atlassian.confluence.pages.PageManager, com.atlassian.confluence.pages.AttachmentManager)}.
 	 */
 	@Test
 	public void testPicker() {
-		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
-		assertNotNull("Not initialising the Picker object correctly", p);
+		assertNotNull("Not initialising the Picker object correctly", picker);
 	}
 
 	/**
@@ -168,9 +170,8 @@ public class PickerTest {
 	 */
 	@Test
 	public void testSplitName() {
-		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
     	String pdf = "abc.pdf";
-    	String[] tokens = p.splitName(pdf);
+    	String[] tokens = picker.splitName(pdf);
     	assertEquals("expected '.' before pdf!", "pdf", tokens[1]);
 	}
 
@@ -178,10 +179,8 @@ public class PickerTest {
 	 * Test method for {@link com.ddowney.plugins.tgen.Picker#getAllSpaces()}.
 	 */
 	@Test
-	public void testGetAllSpaces() {
-		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
-		
-		assertNotNull("Failed to get all spaces.", p.getAllSpaces());
+	public void testGetAllSpaces() {		
+		assertNotNull("Failed to get all spaces.", picker.getAllSpaces());
 	}
 
 	/**
@@ -189,9 +188,7 @@ public class PickerTest {
 	 */
 	@Test
 	public void testGetAllPages() {
-		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
-		
-		assertNotNull("Failed to get all pages", p.getAllPages(spaces));
+		assertNotNull("Failed to get all pages", picker.getAllPages(spaces));
 	}
 
 	/**
@@ -199,9 +196,7 @@ public class PickerTest {
 	 */
 	@Test
 	public void testGetAllAttachments() {
-		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
-		
-		assertEquals("Either null or not equal to the filtered attachment list", attachments, p.getAllAttachments(pages));
+		assertEquals("Either null or not equal to the filtered attachment list", attachments, picker.getAllAttachments(pages));
 	}
 
 	/**
@@ -212,8 +207,7 @@ public class PickerTest {
 	 */
 	@Test
 	public void testConvert() throws IOException, AttachmentDataExistsException {
-		Picker p = new Picker(spaceManager, pageManager, attachmentManager);
-		assertTrue("Failed to attach!", p.convert(attachments));		
+		assertTrue("Failed to attach!", picker.convert(attachments));		
 	}
 
 }

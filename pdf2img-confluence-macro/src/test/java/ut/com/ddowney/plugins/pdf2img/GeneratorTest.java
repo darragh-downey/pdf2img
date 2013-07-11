@@ -12,10 +12,14 @@ import java.io.IOException;
 
 
 
+
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
 import com.atlassian.confluence.pages.AttachmentManager;
 import com.ddowney.plugins.pdf2img.Generator;
@@ -30,12 +34,16 @@ public class GeneratorTest {
 	@Mock
 	private AttachmentManager attachmentManager;
 	
+	private Generator gen;
+	@Before
+	public void setUp(){
+		gen = new Generator(attachmentManager);
+	}
 	/**
 	 * Test method for {@link com.ddowney.plugins.tgen.Generator#Generator(com.atlassian.confluence.pages.AttachmentManager)}.
 	 */
 	@Test
 	public void testGenerator() {
-		Generator gen = new Generator(attachmentManager);
 		assertNotNull("expected Generator object", gen);
 	}
 
@@ -44,7 +52,6 @@ public class GeneratorTest {
 	 */
 	@Test
 	public void testGetAttachmentManager() {
-		Generator gen = new Generator(attachmentManager);
 		gen.setAttachmentManager(attachmentManager);
 		assertEquals("attachment manager not set!", attachmentManager, gen.getAttachmentManager());
 	}
@@ -66,7 +73,6 @@ public class GeneratorTest {
 	 */
 	@Test
 	public void testCreateImage() throws IOException, AttachmentDataExistsException {
-		Generator gen = new Generator(attachmentManager);
 		FileInputStream pdf = null;
 		try {
 			pdf = new FileInputStream("C:\\Documents and Settings\\ddowney\\My Documents\\Newsletter_Mercury_13.1.pdf");
