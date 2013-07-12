@@ -1,5 +1,6 @@
 package com.ddowney.plugins.pdf2img;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -182,36 +183,120 @@ public class Picker {
 			for(Attachment a : attachments){
 				InputStream in = attachmentManager.getAttachmentData(a); //get attachments data
 				Attachment attach = null;
-				try {
-					attach = gen.createImage(in, a.getFileName());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					picklog.error("IO Exception");
-					picklog.trace("IO Exception trace", e1);
-					e1.printStackTrace();
-				}catch (AttachmentDataExistsException e2) {
-					//create an image using data, assign to new attachment
-					picklog.error("Attachment Data Exists Exception");
-					picklog.trace("Attachment Data Exists Exception trace", e2);
-					e2.printStackTrace();
+				if(a.getFileExtension().contains("pdf")){
+					try {
+						attach = gen.createImage(in, a.getFileName());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						picklog.error("IO Exception");
+						picklog.trace("IO Exception trace", e1);
+						e1.printStackTrace();
+					}catch (AttachmentDataExistsException e2) {
+						//create an image using data, assign to new attachment
+						picklog.error("Attachment Data Exists Exception");
+						picklog.trace("Attachment Data Exists Exception trace", e2);
+						e2.printStackTrace();
+					}
+					try {
+						attachmentManager.saveAttachment(attach, null, in);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						picklog.error("IO Exception");
+						picklog.trace("IO Exception trace", e);
+						e.printStackTrace();
+					} //save attachment
+					page.addAttachment(attach); //attach saved attachment to current page
+					if(attach.getContent() != page){
+						picklog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
+						return false;
+					}
+					imagelog.info("Attached %s to %s", a.getFileName(), page.getTitle());
+				}else if(a.getFileExtension().contains("doc") || a.getFileExtension().contains("docx")){
+					
+				}else if(a.getFileExtension().contains("ppt") || a.getFileExtension().contains("pptx")){
+					
+				}else if(a.getFileExtension().contains("xls") || a.getFileExtension().contains("xlsx")){
+					
 				}
-				try {
-					attachmentManager.saveAttachment(attach, null, in);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					picklog.error("IO Exception");
-					picklog.trace("IO Exception trace", e);
-					e.printStackTrace();
-				} //save attachment
-				page.addAttachment(attach); //attach saved attachment to current page
-				if(attach.getContent() != page){
-					picklog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
-					return false;
-				}
-				imagelog.info("Attached %s to %s", a.getFileName(), page.getTitle());
+				
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Get the image data of Word2007Logo.png and place in an InputStream.
+	 * @return doc
+	 * @throws FileNotFoundException
+	 */
+	public InputStream getWordData() throws FileNotFoundException{
+		InputStream doc = getClass().getClassLoader().getResourceAsStream("resources\\images\\Word2007Logo.png");
+		return doc;
+	}
+	
+	/**
+	 * Get the image data of pptLogo.png and place in an InputStream.
+	 * @return ppt
+	 * @throws FileNotFoundException
+	 */
+	public InputStream getPptData() throws FileNotFoundException{
+		InputStream ppt = getClass().getClassLoader().getResourceAsStream("resources\\images\\pptLogo.png");
+		return ppt;
+	}
+	
+	/**
+	 * Get the image data of excelLogo.png and place in an InputStream.
+	 * @return xl
+	 * @throws FileNotFoundException
+	 */
+	public InputStream getXlData() throws FileNotFoundException{
+		InputStream xl = getClass().getClassLoader().getResourceAsStream("resources\\images\\excelLogo.png");
+		return xl;
+	}
+	
+	/**
+	 * Create an attachment using the filename of the doc file and the data 
+	 * from the word logo.
+	 * @param filename
+	 * @return word
+	 * @throws FileNotFoundException
+	 * @throws AttachmentDataExistsException
+	 */
+	public Attachment getWordImg(String filename) throws FileNotFoundException, AttachmentDataExistsException{
+		Attachment word = new Attachment();
+		word.setFileName(filename + ".png");
+		attachmentManager.setAttachmentData(word, getWordData());
+		return word;	
+	}
+	
+	/**
+	 * Create an attachment using the filename of the ppt file and the data 
+	 * from the ppt logo.
+	 * @param filename
+	 * @return ppt
+	 * @throws FileNotFoundException
+	 * @throws AttachmentDataExistsException
+	 */
+	public Attachment getPptImg(String filename) throws FileNotFoundException, AttachmentDataExistsException{
+		Attachment ppt = new Attachment();
+		ppt.setFileName(filename + ".png");
+		attachmentManager.setAttachmentData(ppt, getPptData());
+		return ppt;	
+	}
+	
+	/**
+	 * Create an attachment using the filename of the xls file and the data 
+	 * from the xls logo.
+	 * @param filename
+	 * @return xl
+	 * @throws FileNotFoundException
+	 * @throws AttachmentDataExistsException
+	 */
+	public Attachment getXlImg(String filename) throws FileNotFoundException, AttachmentDataExistsException{
+		Attachment xl = new Attachment();
+		xl.setFileName(filename + ".png");
+		attachmentManager.setAttachmentData(xl, getWordData());
+		return xl;	
 	}
 	
 	public class StringComparator implements Comparator<String>{

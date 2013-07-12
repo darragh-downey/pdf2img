@@ -1,11 +1,3 @@
-<html>
-  <head>
-    <title>XProduct Admin</title>
-	<meta name="decorator" content="atl.admin">
-		$webResourceManager.requireResource("com.atlassian.auiplugin:ajs")
-  </head>
-  <body>
-	
 <nav class="aui-navgroup aui-navgroup-horizontal">
     <div class="aui-navgroup-inner">
         <div class="aui-navgroup-primary">
@@ -25,32 +17,31 @@
 <div class="aui-page-panel">
     <div class="aui-page-panel-inner">
         <section class="aui-page-panel-content">
-            <h2>Heading</h2>
-                Content goes here  Content goes here   Content goes here  Content goes here 
+        <h1>Welcome to the pdf2img admin console</h1>
+        
+<table class="aui">
+    <thead>
+        <tr>
+            <th id="basic-numof">Num of pdfs this conversion</th>
+            <th id="basic-lexec">Last Execution</th>
+            <th id="basic-nxtexec">Next Execution</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td headers="basic-numof">31</td>
+            <td headers="basic-lexec">00:00, thurs 10/07/2013</td>
+            <td headers="basic-nxtexec">00:00, fri 11/07/2013</td>
+        </tr>
+        </tbody>
+</table>
+
+           <p>
+<button id="dialog-button" class="aui-button aui-button-primary">Convert</button>
+<button class="aui-button aui-button-subtle" href="#" id="popupLink">
+    <span class="aui-icon aui-icon-small aui-iconfont-share">share</span> Info
+</button></p>
         </section>
     </div>
 </div>
-
-
-<div class="aui-dropdown2 aui-style-default" id="hnavsettings-dropdown" data-dropdown2-alignment="right">
-    <ul>
-        <li><a href="#" class="">Nav dropdown item</a></li>
-        <li><a href="#" class="active">Nav dropdown item</a></li>
-        <li><a href="#">Nav dropdown item</a></li>
-    </ul>
-</div>
-    <form id="admin" class="aui">
-		<div class="field-group">
-           <label for="name">Name:</label>
-           <input type="text" id="name" name="name" class="text">
-        </div>
-        <div class="field-group">
-           <label for="time">Time:</label>
-           <input type="text" id="time" name="time" class="text">
-        </div>
-        <div class="field-group">
-           <input type="submit" value="Save" class="button">
-        </div>
-	</form>
-  </body>
-</html>
+    
