@@ -43,31 +43,51 @@ public class Picker {
 		this.attachmentManager = attachmentManager;
 	}
 	
+	/**
+	 * Splits the string by the '.' and omits it.
+	 * @param fileName The name of the file to split.
+	 * @return tokens The resulting strings of the split.
+	 */
 	public String[] splitName(String fileName){ 
 		String[] tokens = fileName.split("\\.(?=[^\\.]+$)");
 		return tokens;
 	}
 	
+	/**
+	 * Get all the spaces in the site.
+	 * @return spaces Return a List<Space>, a list of spaces.
+	 */
 	public List<Space> getAllSpaces(){
 		List<Space> spaces = spaceManager.getAllSpaces();
+		for(Space s : spaces){
+			picklog.info(s.getName());
+		}
 		return spaces;
 	}
 	
-	/*
-	public List<Page> filterPages(Space space){
-		List<Page> filteredPages = new ArrayList<Page>();
-
+	/**
+	 * Select a space by it's name.
+	 * @param name The name of the space.
+	 * @param spaces The List of spaces.
+	 * @return space The space with the same name as 'name'.
+	 */
+	public Space getSpaceByName(String name, List<Space> spaces){
+		Space space = null;
 		for(Space s : spaces){
-			//space keys are unique in Confluence, so there should only be one exact match.
-			if(space.getKey() == s.getKey()){
-				//get pages from space put in List<Page>. getPages(
-				filteredPages = pageManager.getPages(s, true);
+			if(name.equalsIgnoreCase(s.getName())){
+				space = s;
+				picklog.info(space.getName());
 			}
 		}
-		return filteredPages;
+		return space;
 	}
-	*/
 	
+	/**
+	 * Get all the pages that are in all of the spaces in the List<Space> spaces.
+	 * @param spaces A List<Space> containing all of Confluences spaces.
+	 * @return pages A Map<Space, List<Page>> that contains spaces as keys and all the pages
+	 * associated with that space as the value.
+	 */
 	public Map<Space, List<Page>> getAllPages(List<Space> spaces){
     	Map<Space, List<Page>> pages = new HashMap<Space, List<Page>>();
     	
@@ -78,8 +98,20 @@ public class Picker {
     	return pages;
     }
 	
-	/*
-	 * Return a filtered list of attachments, ie. should only contain pdfs.
+	/**
+	 * Get all of the pages of a selected space.
+	 * @param space The selected Space. 
+	 * @return pages The List<Page> for that Space.
+	 */
+	public List<Page> getCurrSpacePages(Space space){
+		List<Page> pages = pageManager.getPages(space, true);
+		return pages;
+	}
+	
+	/**
+	 * Filter attachments by file extension. Get list of pdf files only.
+	 * @param att
+	 * @return filteredList List<Attachment> with only a single occurrence of each pdf per page.  
 	 */
 	public List<Attachment> filterAttachments(List<Attachment> att){
 		List<Attachment> filteredList = new ArrayList<Attachment>();
@@ -94,11 +126,11 @@ public class Picker {
 		return filteredList;
 	}
 	
-	/*
+	/**
 	 * Return a Map detailing a filtered list of attachments for each page.
-	 * Using the page (key to the map) in the future for attaching the newly created image to the correct page. 
-	 * 
-	 * @return Map<Page, List<Attachment>> 
+	 * Using the page (key to the map) in the future for attaching the newly created image to the correct page.
+	 * @param pages A Map<Space, List<Page>> containing all of the spaces and pages associated with them.
+	 * @return attachMap A Map<Page, List<Attachment>> containing all of the pages and attachments associated with them.
 	 */
 	public Map<Page, List<Attachment>> getAllAttachments(Map<Space, List<Page>> pages){
 		Map<Page, List<Attachment>> attachMap = new HashMap<Page, List<Attachment>>();
@@ -119,6 +151,26 @@ public class Picker {
     	return attachMap;
     }
 	
+	/**
+	 * Get all of the Attachments in the selected Space.
+	 * @param pages A List<Page> of all the Pages in the selected Space.
+	 * @return attachments A Map<Page, List<Attachment>> containing all the pages, used as keys in the Map,
+	 * for the selected Space and a List of Attachments associated with each Page.
+	 */
+	public Map<Page, List<Attachment>> getAttachmentsInCurrSpace(List<Page> pages){
+		Map<Page, List<Attachment>> attachments = new HashMap<Page, List<Attachment>>();
+		
+		for(Page p : pages){
+			attachments.put(p, attachmentManager.getAttachments(p));
+		}
+		return attachments;
+	}
+	
+	/**
+	 * Convert the given list of attachments to png format.
+	 * @param attachMap
+	 * @return boolean for the sake of unit testing, otherwise void.
+	 */
 	public boolean convert(Map<Page, List<Attachment>> attachMap){
 		Generator gen = new Generator(attachmentManager);
 		Iterator<Page> it = attachMap.keySet().iterator();
@@ -163,6 +215,10 @@ public class Picker {
 	}
 	
 	public class StringComparator implements Comparator<String>{
+		/**
+		 * Compare two strings.
+		 * If the value returned isn't 0 then the strings aren't equal.
+		 */
 		public int compare(String a, String b){		
 			return a.compareTo(b);
 		}

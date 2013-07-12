@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
@@ -25,6 +26,7 @@ import com.atlassian.confluence.pages.PageManager;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.AttachmentManager;
 import com.atlassian.confluence.pages.Attachment;
+import com.atlassian.user.User;
 import com.ddowney.plugins.pdf2img.Picker;
 
 /**
@@ -35,16 +37,6 @@ import com.ddowney.plugins.pdf2img.Picker;
 public class PickerTest {
 	
 	private Picker picker;
-	@Mock 
-	private Space jam;
-	@Mock 
-	private Space man;
-	@Mock 
-	private Space ikea;
-	@Mock 
-	private Space meat;
-	@Mock 
-	private Space veg;
 	
 	@Mock 
 	private Page Daffy_duck = new Page();
@@ -78,6 +70,8 @@ public class PickerTest {
 	@Mock 
 	private Attachment rashers_pdf = new Attachment();
 	
+	@Mock
+	User user;
 	@Mock 
 	private SpaceManager spaceManager;
 	@Mock 
@@ -95,29 +89,29 @@ public class PickerTest {
 	@Before
 	public void setUp(){		
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
+			
+		spaceManager.createSpace("j", "jam", "Space Jam", user);
+		spaceManager.createSpace("ik", "ikea", "Ikea, for all your furniture needs", user);
+		spaceManager.createSpace("m", "man", "AWW MAN", user);
+		spaceManager.createSpace("mt", "meat", "#MMMM MEAT", user);
+		spaceManager.createSpace("v", "veg", "Veggies are sickos #LOL", user);
 		
-		jam = new Space();
-		man = new Space();
-		ikea = new Space();
-		meat = new Space();
-		veg = new Space();
+		spaces.add(spaceManager.getSpace("ik"));
+		spaces.add(spaceManager.getSpace("j"));
+		spaces.add(spaceManager.getSpace("m"));
+		spaces.add(spaceManager.getSpace("mt"));
+		spaces.add(spaceManager.getSpace("v"));
 		
-		spaces.add(ikea);
-		spaces.add(jam);
-		spaces.add(man);
-		spaces.add(meat);
-		spaces.add(veg);
-		
-		Daffy_duck.setSpace(jam);
-		Bugs_bunny.setSpace(jam);
-		Steak.setSpace(meat);
-		Rashers.setSpace(meat);
-		Carrot.setSpace(veg);
-		Broccoli.setSpace(veg);
-		Bed.setSpace(ikea);
-		Table.setSpace(ikea);
-		JJ.setSpace(man);
-		DD.setSpace(man);
+		Daffy_duck.setSpace(spaceManager.getSpace("j"));
+		Bugs_bunny.setSpace(spaceManager.getSpace("j"));
+		Steak.setSpace(spaceManager.getSpace("mt"));
+		Rashers.setSpace(spaceManager.getSpace("mt"));
+		Carrot.setSpace(spaceManager.getSpace("v"));
+		Broccoli.setSpace(spaceManager.getSpace("v"));
+		Bed.setSpace(spaceManager.getSpace("ik"));
+		Table.setSpace(spaceManager.getSpace("ik"));
+		JJ.setSpace(spaceManager.getSpace("m"));
+		DD.setSpace(spaceManager.getSpace("m"));
 		
 		
 		for(Space s : spaces){
@@ -172,7 +166,8 @@ public class PickerTest {
 	public void testSplitName() {
     	String pdf = "abc.pdf";
     	String[] tokens = picker.splitName(pdf);
-    	assertEquals("expected '.' before pdf!", "pdf", tokens[1]);
+    	assertEquals("expected pdf got " + tokens[1], "pdf", tokens[1]);
+    	assertEquals("expected abc got " + tokens[0], "abc", tokens[0]);
 	}
 
 	/**
@@ -182,12 +177,22 @@ public class PickerTest {
 	public void testGetAllSpaces() {		
 		assertNotNull("Failed to get all spaces.", picker.getAllSpaces());
 	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testGetSpaceByName(){
+		String jam = "jam";
+		assertEquals("Expected jam, got " + picker.getSpaceByName(jam, spaces), "jam", picker.getSpaceByName(jam, spaces));
+	}
 
 	/**
 	 * Test method for {@link com.ddowney.plugins.tgen.Picker#getAllPages(java.util.List)}.
 	 */
 	@Test
 	public void testGetAllPages() {
+		//System.out.println(picker.getAllPages(spaces));
 		assertNotNull("Failed to get all pages", picker.getAllPages(spaces));
 	}
 

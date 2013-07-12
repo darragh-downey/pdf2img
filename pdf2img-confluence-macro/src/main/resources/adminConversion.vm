@@ -5,6 +5,40 @@
 		$webResourceManager.requireResource("com.atlassian.auiplugin:ajs")
   </head>
   <body>
+	
+<nav class="aui-navgroup aui-navgroup-horizontal">
+    <div class="aui-navgroup-inner">
+        <div class="aui-navgroup-primary">
+            <ul class="aui-nav">
+                <li class="aui-nav-selected"><a href="#">Conversion</a></li>
+                <li><a href="#">Configuration</a></li>
+            </ul>
+        </div><!-- .aui-navgroup-primary -->
+        <div class="aui-navgroup-secondary">
+            <ul class="aui-nav">
+                <li><a href="#hnavsettingsDropdown" class="aui-dropdown2-trigger" aria-owns="hnavsettings-dropdown" aria-haspopup="true"><span class="aui-icon aui-icon-small aui-iconfont-configure">Configure</span> <span class="aui-icon-dropdown"></span></a></li>
+            </ul>
+        </div><!-- .aui-navgroup-secondary -->
+    </div><!-- .aui-navgroup-inner -->
+</nav>
+
+<div class="aui-page-panel">
+    <div class="aui-page-panel-inner">
+        <section class="aui-page-panel-content">
+            <h2>Heading</h2>
+                Content goes here  Content goes here   Content goes here  Content goes here 
+        </section>
+    </div>
+</div>
+
+
+<div class="aui-dropdown2 aui-style-default" id="hnavsettings-dropdown" data-dropdown2-alignment="right">
+    <ul>
+        <li><a href="#" class="">Nav dropdown item</a></li>
+        <li><a href="#" class="active">Nav dropdown item</a></li>
+        <li><a href="#">Nav dropdown item</a></li>
+    </ul>
+</div>
     <form id="admin" class="aui">
 		<div class="field-group">
            <label for="name">Name:</label>
