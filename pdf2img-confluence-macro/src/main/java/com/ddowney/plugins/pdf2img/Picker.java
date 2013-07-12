@@ -212,11 +212,65 @@ public class Picker {
 					}
 					imagelog.info("Attached %s to %s", a.getFileName(), page.getTitle());
 				}else if(a.getFileExtension().contains("doc") || a.getFileExtension().contains("docx")){
-					
+					try {
+						attach = getWordImg(a.getFileName());
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (AttachmentDataExistsException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}				
+					try {
+						attachmentManager.saveAttachment(attach, null, getWordData());
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					page.addAttachment(attach);
 				}else if(a.getFileExtension().contains("ppt") || a.getFileExtension().contains("pptx")){
-					
+					try {
+						attach = getPptImg(a.getFileName());
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (AttachmentDataExistsException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						attachmentManager.saveAttachment(attach, null, getPptData());
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					page.addAttachment(attach);
 				}else if(a.getFileExtension().contains("xls") || a.getFileExtension().contains("xlsx")){
-					
+					try {
+						attach = getXlImg(a.getFileName());
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (AttachmentDataExistsException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						attachmentManager.saveAttachment(attach, null, getXlData());
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					page.addAttachment(attach);
 				}
 				
 			}
@@ -302,7 +356,7 @@ public class Picker {
 	public class StringComparator implements Comparator<String>{
 		/**
 		 * Compare two strings.
-		 * If the value returned isn't 0 then the strings aren't equal.
+		 * If the value returned isn't 0 then the strings aren't the same.
 		 */
 		public int compare(String a, String b){		
 			return a.compareTo(b);
