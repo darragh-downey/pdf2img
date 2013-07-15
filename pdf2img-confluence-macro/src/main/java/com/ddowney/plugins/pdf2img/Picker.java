@@ -75,7 +75,7 @@ public class Picker {
 	public Space getSpaceByName(String name, List<Space> spaces){
 		Space space = null;
 		for(Space s : spaces){
-			if(name.equalsIgnoreCase(s.getName())){
+			if(name.equalsIgnoreCase(s.getName()) && s.getName() != null){
 				space = s;
 				picklog.info(space.getName());
 			}
@@ -181,21 +181,21 @@ public class Picker {
 			List<Attachment> attachments = attachMap.get(page);
 			//loop through the attachments attached to current page
 			for(Attachment a : attachments){
-				InputStream in = attachmentManager.getAttachmentData(a); //get attachments data
 				Attachment attach = null;
 				if(a.getFileExtension().contains("pdf")){
+					InputStream in = attachmentManager.getAttachmentData(a); //get attachments data
 					try {
 						attach = gen.createImage(in, a.getFileName());
-					} catch (IOException e1) {
+					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						picklog.error("IO Exception");
-						picklog.trace("IO Exception trace", e1);
-						e1.printStackTrace();
-					}catch (AttachmentDataExistsException e2) {
+						picklog.trace("IO Exception trace", e);
+						e.printStackTrace();
+					}catch (AttachmentDataExistsException e) {
 						//create an image using data, assign to new attachment
 						picklog.error("Attachment Data Exists Exception");
-						picklog.trace("Attachment Data Exists Exception trace", e2);
-						e2.printStackTrace();
+						picklog.trace("Attachment Data Exists Exception trace", e);
+						e.printStackTrace();
 					}
 					try {
 						attachmentManager.saveAttachment(attach, null, in);
