@@ -17,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.Mockito.*;
@@ -40,19 +41,21 @@ import com.ddowney.plugins.pdf2img.Picker;
 public class PickerTest {
 	
 	private static Picker picker;
-	
+	private static Space jam;	
+	private static  Space ikea;
+	private static  Space  man;
 	//@Mock 
 	//private static Page Daffy_duck = mock(Page.class);
-	private static Page Daffy_duck = new Page();
+	private static Page DAFFY_DUCK = new Page();
 	//@Mock 
 	//private static Page Bugs_bunny = mock(Page.class);
-	private static Page Bugs_bunny = new Page();
+	private static Page BUGS_BUNNY = new Page();
 	//@Mock 
 	//private static Page Bed = mock(Page.class);
-	private static Page Bed = new Page();
+	private static Page BED = new Page();
 	//@Mock 
 	//private static Page Table = mock(Page.class);
-	private static Page Table = new Page();
+	private static Page TABLE = new Page();
 	//@Mock 
 	//private static Page JJ = mock(Page.class);
 	private static Page JJ =  new Page();
@@ -81,11 +84,11 @@ public class PickerTest {
 	private static UserManager userManager;
 	
 	//@SuppressWarnings("unchecked")
-	@Mock 
+	//@Mock 
 	//private static List<Space> spaces = mock(List.class);
 	private static List<Space> spaces = new ArrayList<Space>();
 	//@SuppressWarnings("unchecked")
-	@Mock
+	//@Mock
 	//private static Map<Space, List<Page>> pages = mock(Map.class);
 	private static Map<Space, List<Page>> pages = new HashMap<Space, List<Page>>();
 	//@SuppressWarnings("unchecked")
@@ -95,17 +98,16 @@ public class PickerTest {
 	
 	@BeforeClass
 	public static void setUp() throws EntityException{		
-		picker = new Picker(spaceManager, pageManager, attachmentManager);
 		
 		DefaultUser duser = mock(DefaultUser.class);
-		duser.setEmail("ddowney@fexco.com");
+		/*duser.setEmail("ddowney@fexco.com");
 		duser.setFullName("Darragh Downey");
-		duser.setPassword("ddowney");
+		duser.setPassword("ddowney");*/
 		//User user = duser;
 			
-		Space jam = new Space();
-		Space ikea = new Space();
-		Space man = new Space();
+	    jam = new Space();
+	    ikea = new Space();
+	    man = new Space();
 		
 		jam.setName("jam");
 		ikea.setName("ikea");
@@ -151,20 +153,20 @@ public class PickerTest {
 		//verify(spaces, times(5)).add(meat);		
 		//verify(spaces, times(5)).add(veg);
 		
-		Daffy_duck.setSpace(jam);
-		Daffy_duck.setParentPage(jam.getHomePage());
+		DAFFY_DUCK.setSpace(jam);
+		DAFFY_DUCK.setParentPage(jam.getHomePage());
 		
 		//verify(Daffy_duck).setParentPage(jam.getHomePage());
 		
-		Bugs_bunny.setParentPage(jam.getHomePage());
+		BUGS_BUNNY.setParentPage(jam.getHomePage());
 		
 		//verify(Bugs_bunny).setParentPage(jam.getHomePage());
 		
-		Bed.setParentPage(ikea.getHomePage());
+		BED.setParentPage(ikea.getHomePage());
 		
 		//verify(Bed).setParentPage(ikea.getHomePage());
 		
-		Table.setParentPage(ikea.getHomePage());
+		TABLE.setParentPage(ikea.getHomePage());
 		
 		//verify(Table).setParentPage(ikea.getHomePage());
 		
@@ -176,39 +178,36 @@ public class PickerTest {
 		
 		//verify(DD).setParentPage(man.getHomePage());
 				
-		for(Space s : spaces){
-		//	if(pageManager.getPages(s, true) != null){
-				List<Page> pgs = pageManager.getPages(s, true);
-				verify(pageManager).getPages(s, true);
-				pages.put(s, pgs);
-			//	verify(pages).put(s, pgs);
-		//	}			
-		}
-		
-		daffy_pdf = new Attachment();
+
+	
 		daffy_pdf.setFileName("daffy.pdf");
-		daffy_pdf.setContent(Daffy_duck);
+		daffy_pdf.setContent(DAFFY_DUCK);
 		daffy_pdf.setContentType("attachment");
 			
 		daffy_doc = new Attachment();
 		daffy_doc.setFileName("daffy.doc");
 		daffy_doc.setContentType("attachment");
-		daffy_doc.setContent(Daffy_duck);
+		daffy_doc.setContent(DAFFY_DUCK);
 		
 		bugs_doc = new Attachment();
 		bugs_doc.setFileName("bug.doc");
 		bugs_doc.setContentType("attachment");
-		bugs_doc.setContent(Daffy_duck);
+		bugs_doc.setContent(DAFFY_DUCK);
 		
 		steak_doc = new Attachment();
 		steak_doc.setFileName("steak.doc");
 		steak_doc.setContentType("attachment");
-		steak_doc.setContent(Daffy_duck);
+		steak_doc.setContent(DAFFY_DUCK);
 		
 		rashers_pdf = new Attachment();
 		rashers_pdf.setFileName("rashers.pdf");
 		rashers_pdf.setContentType("attachment");
-		rashers_pdf.setContent(Daffy_duck);
+		rashers_pdf.setContent(DAFFY_DUCK);
+		
+		
+		
+		
+		
 		
 		//verify(daffy_pdf).setContent(Daffy_duck);
 		//verify(daffy_doc).setContent(Daffy_duck);
@@ -216,7 +215,8 @@ public class PickerTest {
 		//verify(steak_doc).setContent(Daffy_duck);
 		//verify(rashers_pdf).setContent(Daffy_duck);
 		
-		Iterator<Space> it = spaces.iterator();
+		
+		/*Iterator<Space> it = spaces.iterator();
 		while(it.hasNext()){
 			Space sp = it.next();
 			List<Page> pg = pages.get(sp);
@@ -230,8 +230,27 @@ public class PickerTest {
 			//	verify(picker).filterAttachments(hold);
 				attachments.put(pge, att);				
 			//	verify(attachments).put(pge, att);
-			}
+			}*/
+		//}
+	}
+
+	private Map<Space, List<Page>> getPagesList() {
+		for(Space s : spaces){
+			
+				pages.put(s,  getPages() );
+			
+						
 		}
+		
+		return pages;
+	}
+
+	private List<Page>  getPages() {
+		List<Page> pages= new ArrayList<Page>();
+		pages.add(BED);
+		pages.add(TABLE);
+		pages.add(JJ);
+		return pages;
 	}
 	
 	@AfterClass
@@ -257,8 +276,10 @@ public class PickerTest {
 	@Test
 	public void testSplitName() {
     	String pdf = "abc.pdf";
+    	picker = new Picker(spaceManager, pageManager, attachmentManager);
     	String[] tokens = picker.splitName(pdf);
-    	verify(picker).splitName(pdf);
+    //this makes me shomit	
+   // 	verify(picker).splitName(pdf);
     	assertEquals("expected pdf got " + tokens[1], "pdf", tokens[1]);
     	assertEquals("expected abc got " + tokens[0], "abc", tokens[0]);
 	}
@@ -267,9 +288,13 @@ public class PickerTest {
 	 * Test method for {@link com.ddowney.plugins.tgen.Picker#getAllSpaces()}.
 	 */
 	@Test
-	public void testGetAllSpaces() {	
-		verify(picker.getAllSpaces());
+	public void testGetAllSpaces() {
+		//picker is not one mocker object
+		//verify(picker.getAllSpaces());
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
+		when(spaceManager.getAllSpaces()).thenReturn(spaces);
 		assertNotNull("Failed to get all spaces.", picker.getAllSpaces());
+		verify(spaceManager).getAllSpaces();
 	}
 	
 	/**
@@ -277,9 +302,10 @@ public class PickerTest {
 	 */
 	@Test
 	public void testGetSpaceByName(){
+		when(spaceManager.getSpace("j")).thenReturn(jam);
 		String jam = "jam";
 		String name = spaceManager.getSpace("j").getName();
-		verify(spaceManager).getSpace("j").getName();
+		verify(spaceManager).getSpace("j");
 		assertEquals("Not the same", name, jam);
 		assertNotNull("Expected jam, got " + picker.getSpaceByName(jam, spaces), picker.getSpaceByName(jam, spaces));
 	}
@@ -289,9 +315,17 @@ public class PickerTest {
 	 */
 	@Test
 	public void testGetAllPages() {
-		//System.out.println(picker.getAllPages(spaces));
-		verify(picker).getAllPages(spaces);
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
+
+		
+		when(pageManager.getPages(ikea, true)).thenReturn(getPages());
+		when(pageManager.getPages(jam, true)).thenReturn(getPages());
+		when(pageManager.getPages(man, true)).thenReturn(getPages());
+		
 		assertNotNull("Failed to get all pages", picker.getAllPages(spaces));
+		verify(pageManager).getPages(ikea, true);
+		verify(pageManager).getPages(jam, true);
+		verify(pageManager).getPages(man, true);
 	}
 	
 	/**
@@ -307,8 +341,12 @@ public class PickerTest {
 	 */
 	@Test
 	public void testGetAllAttachments() {
-		verify(picker).getAllAttachments(pages);
-		assertEquals("Either null or not equal to the filtered attachment list", attachments, picker.getAllAttachments(pages));
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
+		Page mock = mock(Page.class, Mockito.RETURNS_SMART_NULLS);
+		when(attachmentManager.getAttachments(mock)).thenReturn(new ArrayList<Attachment>());
+		
+		assertNotNull("Either null or not equal to the filtered attachment list", picker.getAllAttachments(getPagesList()));
+		verify(attachmentManager,times(9)).getAttachments(mock);
 	}
 	
 	/**
