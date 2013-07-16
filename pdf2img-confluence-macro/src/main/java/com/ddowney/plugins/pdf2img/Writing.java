@@ -22,6 +22,7 @@ public class Writing{
 	private Logger wLog = LoggerFactory.getLogger(Writing.class);
 	private final static Charset ENCODING = StandardCharsets.UTF_8;
 	private Path path;
+	private String uri = "/src/main/resources/fileTracker.txt";
 	
 	private ArrayList<String> writeTo;
 	
@@ -32,10 +33,10 @@ public class Writing{
 	/**
 	 * Create the file 'fileTracker.txt'. If it already exists throw an exception.
 	 */
-	public void createFile(){
-		path = Paths.get("/src/main/resources/fileTracker.txt");
+	public void createFile(String uri){
+		path = Paths.get(uri);
 		try{
-			if(!fileExists()){
+			if(!fileExists(uri)){
 				Files.createFile(path);
 			}
 		}catch(FileAlreadyExistsException e){
@@ -49,8 +50,9 @@ public class Writing{
 	 * Checks to see if the file already exists.
 	 * @return boolean True for it exists, False otherwise.
 	 */
-	public boolean fileExists(){
-		if(path.toFile().exists()){
+	public boolean fileExists(String uri){
+		Path p = Paths.get(uri);
+		if(p.toFile().exists()){
 			return true;
 		}
 		return false;
@@ -60,10 +62,10 @@ public class Writing{
 	 * Cycle through the ArrayList writeTo and write each String in that List
 	 * to the file denoted by path.
 	 */
-	public void writeFile() {
+	public void writeFile(ArrayList<String> lines) {
 		try{
 			BufferedWriter writer = Files.newBufferedWriter(path, ENCODING);
-			for(String line : writeTo){
+			for(String line : lines){
 				writer.write(line);
 				writer.newLine();
 			}
@@ -98,5 +100,13 @@ public class Writing{
 	public void setAttachments(String origin, String thumb){
 		String representation = origin + " - " + thumb;
 		writeTo.add(representation);
+	}
+	
+	/**
+	 * Just return the ArrayList with all of the lines in it.
+	 * @return writeTo ArrayList<String>
+	 */
+	public ArrayList<String> getLines(){
+		return writeTo;
 	}
 }

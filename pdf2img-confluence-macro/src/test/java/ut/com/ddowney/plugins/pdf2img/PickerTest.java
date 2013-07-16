@@ -186,9 +186,9 @@ public class PickerTest {
 		//}
 	}
 
-	private Map<Space, List<Page>> getPagesList() {
+	private Map<Space, List<Page>> getPagesMap() {
 		for(Space s : spaces){
-			pages.put(s,  getPages() );
+			pages.put(s, getPages() );
 		}
 		return pages;
 	}
@@ -212,6 +212,7 @@ public class PickerTest {
 	 */
 	@Test
 	public void testPicker() {
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 		assertNotNull("Not initialising the Picker object correctly", picker);
 	}
 
@@ -289,7 +290,7 @@ public class PickerTest {
 		Page mock = mock(Page.class, Mockito.RETURNS_SMART_NULLS);
 		when(attachmentManager.getAttachments(mock)).thenReturn(new ArrayList<Attachment>());
 		
-		assertNotNull("Either null or not equal to the filtered attachment list", picker.getAllAttachments(getPagesList()));
+		assertNotNull("Either null or not equal to the filtered attachment list", picker.getAllAttachments(getPagesMap()));
 		verify(attachmentManager,times(9)).getAttachments(mock);
 	}
 	
