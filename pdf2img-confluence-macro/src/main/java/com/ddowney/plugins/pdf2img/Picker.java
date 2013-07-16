@@ -174,11 +174,13 @@ public class Picker {
 	 */
 	public boolean convert(Map<Page, List<Attachment>> attachMap){
 		Generator gen = new Generator(attachmentManager);
+		Writing wrt = new Writing();
 		Iterator<Page> it = attachMap.keySet().iterator();
 		
 		while(it.hasNext()){
 			Page page = it.next();
 			List<Attachment> attachments = attachMap.get(page);
+			wrt.setPages(page.getTitle());
 			//loop through the attachments attached to current page
 			for(Attachment a : attachments){
 				Attachment attach = null;
@@ -206,11 +208,13 @@ public class Picker {
 						e.printStackTrace();
 					} //save attachment
 					page.addAttachment(attach); //attach saved attachment to current page
+					wrt.setAttachments(a.getFileName(), attach.getFileName());
 					if(attach.getContent() != page){
 						picklog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
 						return false;
 					}
 					imagelog.info("Attached %s to %s", a.getFileName(), page.getTitle());
+					
 				}else if(a.getFileExtension().contains("doc") || a.getFileExtension().contains("docx")){
 					try {
 						attach = getWordImg(a.getFileName());
@@ -231,6 +235,8 @@ public class Picker {
 						e.printStackTrace();
 					}
 					page.addAttachment(attach);
+					wrt.setAttachments(a.getFileName(), attach.getFileName());
+					
 				}else if(a.getFileExtension().contains("ppt") || a.getFileExtension().contains("pptx")){
 					try {
 						attach = getPptImg(a.getFileName());
@@ -251,6 +257,8 @@ public class Picker {
 						e.printStackTrace();
 					}
 					page.addAttachment(attach);
+					wrt.setAttachments(a.getFileName(), attach.getFileName());
+					
 				}else if(a.getFileExtension().contains("xls") || a.getFileExtension().contains("xlsx")){
 					try {
 						attach = getXlImg(a.getFileName());
@@ -271,8 +279,8 @@ public class Picker {
 						e.printStackTrace();
 					}
 					page.addAttachment(attach);
+					wrt.setAttachments(a.getFileName(), attach.getFileName());
 				}
-				
 			}
 		}
 		return true;

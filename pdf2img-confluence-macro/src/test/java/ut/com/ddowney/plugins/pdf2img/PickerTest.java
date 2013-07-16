@@ -113,10 +113,6 @@ public class PickerTest {
 		ikea.setName("ikea");
 		man.setName("man");
 		
-		//verify(jam).setName("jam");
-		//verify(ikea).setName("ikea");
-		//verify(man).setName("man");
-		
 		Page jamh = new Page();
 		jamh.setTitle("jam home");
 		jam.setHomePage(jamh);
@@ -128,18 +124,6 @@ public class PickerTest {
 		Page manh = new Page();
 		manh.setTitle("man home");
 		man.setHomePage(manh);
-		//Space jam = spaceManager.createSpace("j", "jam", "Space Jam", user);
-		//Space ikea = spaceManager.createSpace("ik", "ikea", "Ikea, for all your furniture needs", user);
-		//Space man = spaceManager.createSpace("m", "man", "AWW MAN", user);
-		//Space meat = spaceManager.createSpace("mt", "meat", "#MMMM MEAT", user);
-		//Space veg = spaceManager.createSpace("v", "veg", "Veggies", user);
-		
-	
-		//verify(spaceManager).createSpace("j", "jam", "Space Jam", user);
-		//verify(spaceManager).createSpace("ik", "ikea", "Ikea, for all your furniture needs", user);
-		//verify(spaceManager).createSpace("m", "man", "AWW MAN", user);
-		//verify(spaceManager).createSpace("mt", "meat", "#MMMM MEAT", user);
-		//verify(spaceManager).createSpace("v", "veg", "Veggies", user);
 		
 		spaces.add(ikea);
 		spaces.add(jam);
@@ -147,39 +131,19 @@ public class PickerTest {
 		spaces.add(man);
 		//spaces.add(veg);
 		
-		//verify(spaces).add(ikea);		
-		//verify(spaces).add(jam);		
-		//verify(spaces).add(man);		
-		//verify(spaces, times(5)).add(meat);		
-		//verify(spaces, times(5)).add(veg);
-		
 		DAFFY_DUCK.setSpace(jam);
 		DAFFY_DUCK.setParentPage(jam.getHomePage());
-		
-		//verify(Daffy_duck).setParentPage(jam.getHomePage());
-		
+				
 		BUGS_BUNNY.setParentPage(jam.getHomePage());
-		
-		//verify(Bugs_bunny).setParentPage(jam.getHomePage());
 		
 		BED.setParentPage(ikea.getHomePage());
 		
-		//verify(Bed).setParentPage(ikea.getHomePage());
-		
 		TABLE.setParentPage(ikea.getHomePage());
 		
-		//verify(Table).setParentPage(ikea.getHomePage());
-		
 		JJ.setParentPage(man.getHomePage());
-		
-		//verify(JJ).setParentPage(man.getHomePage());
-		
+
 		DD.setParentPage(man.getHomePage());
 		
-		//verify(DD).setParentPage(man.getHomePage());
-				
-
-	
 		daffy_pdf.setFileName("daffy.pdf");
 		daffy_pdf.setContent(DAFFY_DUCK);
 		daffy_pdf.setContentType("attachment");
@@ -203,19 +167,7 @@ public class PickerTest {
 		rashers_pdf.setFileName("rashers.pdf");
 		rashers_pdf.setContentType("attachment");
 		rashers_pdf.setContent(DAFFY_DUCK);
-		
-		
-		
-		
-		
-		
-		//verify(daffy_pdf).setContent(Daffy_duck);
-		//verify(daffy_doc).setContent(Daffy_duck);
-		//verify(bugs_doc).setContent(Daffy_duck);
-		//verify(steak_doc).setContent(Daffy_duck);
-		//verify(rashers_pdf).setContent(Daffy_duck);
-		
-		
+
 		/*Iterator<Space> it = spaces.iterator();
 		while(it.hasNext()){
 			Space sp = it.next();
@@ -236,16 +188,12 @@ public class PickerTest {
 
 	private Map<Space, List<Page>> getPagesList() {
 		for(Space s : spaces){
-			
-				pages.put(s,  getPages() );
-			
-						
+			pages.put(s,  getPages() );
 		}
-		
 		return pages;
 	}
 
-	private List<Page>  getPages() {
+	private List<Page> getPages() {
 		List<Page> pages= new ArrayList<Page>();
 		pages.add(BED);
 		pages.add(TABLE);
@@ -256,11 +204,8 @@ public class PickerTest {
 	@AfterClass
 	public static void tearDown(){
 		spaces.clear();
-	//	verify(spaces).clear();
 		pages.clear();
-	//	verify(pages).clear();
 		attachments.clear();
-	//	verify(attachments).clear();
 	}
 	/**
 	 * Test method for {@link com.ddowney.plugins.tgen.Picker#Picker(com.atlassian.confluence.spaces.SpaceManager, com.atlassian.confluence.pages.PageManager, com.atlassian.confluence.pages.AttachmentManager)}.
@@ -279,7 +224,6 @@ public class PickerTest {
     	picker = new Picker(spaceManager, pageManager, attachmentManager);
     	String[] tokens = picker.splitName(pdf);
     //this makes me shomit	
-   // 	verify(picker).splitName(pdf);
     	assertEquals("expected pdf got " + tokens[1], "pdf", tokens[1]);
     	assertEquals("expected abc got " + tokens[0], "abc", tokens[0]);
 	}
@@ -290,7 +234,6 @@ public class PickerTest {
 	@Test
 	public void testGetAllSpaces() {
 		//picker is not one mocker object
-		//verify(picker.getAllSpaces());
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
 		when(spaceManager.getAllSpaces()).thenReturn(spaces);
 		assertNotNull("Failed to get all spaces.", picker.getAllSpaces());
@@ -302,12 +245,13 @@ public class PickerTest {
 	 */
 	@Test
 	public void testGetSpaceByName(){
-		when(spaceManager.getSpace("j")).thenReturn(jam);
-		String jam = "jam";
-		String name = spaceManager.getSpace("j").getName();
-		verify(spaceManager).getSpace("j");
-		assertEquals("Not the same", name, jam);
-		assertNotNull("Expected jam, got " + picker.getSpaceByName(jam, spaces), picker.getSpaceByName(jam, spaces));
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
+	//	when(jam.getName()).thenReturn("jam");
+		String jame = "jam";
+		String name = jam.getName();
+		//verify(spaceManager).getSpace("j");
+		assertEquals("Not the same", name, jame);
+		assertNotNull("Expected jam, got " + picker.getSpaceByName(jame, spaces), picker.getSpaceByName(jame, spaces));
 	}
 
 	/**
@@ -316,7 +260,6 @@ public class PickerTest {
 	@Test
 	public void testGetAllPages() {
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
-
 		
 		when(pageManager.getPages(ikea, true)).thenReturn(getPages());
 		when(pageManager.getPages(jam, true)).thenReturn(getPages());
@@ -334,6 +277,7 @@ public class PickerTest {
 	@Test
 	public void testGetCurrSpacePages(){
 		fail("Not yet implemented");
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 	}
 
 	/**
@@ -355,6 +299,7 @@ public class PickerTest {
 	@Test
 	public void testGetAttachmentsInCurrSpace(){
 		fail("Not yet implemented");
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 	}
 
 	/**
@@ -365,6 +310,7 @@ public class PickerTest {
 	 */
 	@Test
 	public void testConvert() throws IOException, AttachmentDataExistsException {
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 		assertTrue("Failed to attach!", picker.convert(attachments));		
 	}
 	
@@ -374,6 +320,7 @@ public class PickerTest {
 	@Test
 	public void testGetWordData(){
 		fail("Not yet implemented");
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 	}
 	
 	/**
@@ -382,6 +329,7 @@ public class PickerTest {
 	@Test
 	public void testGetPptData(){
 		fail("Not yet implemented");
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 	}
 	
 	/**
@@ -390,6 +338,7 @@ public class PickerTest {
 	@Test
 	public void testGetXlData(){
 		fail("Not yet implemented");
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 	}
 	
 	/**
@@ -398,6 +347,7 @@ public class PickerTest {
 	@Test
 	public void testGetWordImg(){
 		fail("Not yet implemented");
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 	}
 	
 	/**
@@ -406,6 +356,7 @@ public class PickerTest {
 	@Test
 	public void testGetPptImg(){
 		fail("Not yet implemented");
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 	}
 	
 	/**
@@ -414,6 +365,7 @@ public class PickerTest {
 	@Test
 	public void testGetXlImg(){
 		fail("Not yet implemented");
+		picker = new Picker(spaceManager, pageManager, attachmentManager);
 	}
 
 }

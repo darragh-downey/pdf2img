@@ -32,6 +32,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Darragh/Documents/java-image-scaling-0.8.5.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/ddowney/workspace/Resources/java-image-scaling-0.8.5.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
