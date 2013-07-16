@@ -32,8 +32,7 @@ import com.atlassian.confluence.spaces.SpaceManager;
  */
 public class Picker {
 
-	private final static Logger picklog = LoggerFactory.getLogger(Picker.class);
-	private final static Logger imagelog = LoggerFactory.getLogger(Picker.class);
+	private final static Logger pickLog = LoggerFactory.getLogger(Picker.class);
 	private PageManager pageManager;
 	private AttachmentManager attachmentManager;
 	private SpaceManager spaceManager;
@@ -61,7 +60,7 @@ public class Picker {
 	public List<Space> getAllSpaces(){
 		List<Space> spaces = spaceManager.getAllSpaces();
 		for(Space s : spaces){
-			picklog.info(s.getName());
+			pickLog.info(s.getName());
 		}
 		return spaces;
 	}
@@ -77,7 +76,7 @@ public class Picker {
 		for(Space s : spaces){
 			if(name.equalsIgnoreCase(s.getName()) && s.getName() != null){
 				space = s;
-				picklog.info(space.getName());
+				pickLog.info(space.getName());
 			}
 		}
 		return space;
@@ -190,31 +189,29 @@ public class Picker {
 						attach = gen.createImage(in, a.getFileName());
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						picklog.error("IO Exception");
-						picklog.trace("IO Exception trace", e);
+						pickLog.error("IO Exception");
+						pickLog.trace("IO Exception trace", e);
 						e.printStackTrace();
 					}catch (AttachmentDataExistsException e) {
 						//create an image using data, assign to new attachment
-						picklog.error("Attachment Data Exists Exception");
-						picklog.trace("Attachment Data Exists Exception trace", e);
+						pickLog.error("Attachment Data Exists Exception");
+						pickLog.trace("Attachment Data Exists Exception trace", e);
 						e.printStackTrace();
 					}
 					try {
 						attachmentManager.saveAttachment(attach, null, in);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						picklog.error("IO Exception");
-						picklog.trace("IO Exception trace", e);
+						pickLog.error("IO Exception");
+						pickLog.trace("IO Exception trace", e);
 						e.printStackTrace();
 					} //save attachment
 					page.addAttachment(attach); //attach saved attachment to current page
 					wrt.setAttachments(a.getFileName(), attach.getFileName());
 					if(attach.getContent() != page){
-						picklog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
+						pickLog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
 						return false;
 					}
-					imagelog.info("Attached %s to %s", a.getFileName(), page.getTitle());
-					
 				}else if(a.getFileExtension().contains("doc") || a.getFileExtension().contains("docx")){
 					try {
 						attach = getWordImg(a.getFileName());
