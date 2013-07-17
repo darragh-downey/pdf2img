@@ -10,9 +10,11 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * @author ddowney
@@ -20,9 +22,10 @@ import org.slf4j.LoggerFactory;
  */
 public class Reading{
 	
-	private Logger rLog = LoggerFactory.getLogger(Reading.class);
+	private Logger rLog = LogManager.getLogger(Reading.class.getName());
 	private Path path; 
 	private File file;
+	private ArrayList<String> tbcList = new ArrayList<String>();
 	private final static Charset ENCODING = StandardCharsets.UTF_8;
 	
 	public Reading(Path path, File file){
@@ -34,19 +37,16 @@ public class Reading{
 		return file;
 	}
 
-	public void readFile() {
+	public void readFile(ArrayList<String> attachNames) {
 		try{
 			BufferedReader reader = Files.newBufferedReader(path, ENCODING);
 			String line = null;
 			while((line = reader.readLine()) != null){
-				/**
-				 * process the lines some way
-				 * what I imagine doing is writing the to the file in this way
-				 * pageName - originalFileName - thumbnailName
-				 * this way I know where the file originated from.
-				 * I should get back to work...
-				 */
-				
+				for(String names : attachNames){
+					if(!line.equals(names)){
+						setTBConvertedList(names);
+					}
+				}
 			}
 		}catch(IOException e){
 			rLog.error("IO Exception", e);
@@ -55,4 +55,19 @@ public class Reading{
 		}
 	}
 	
+	/**
+	 * Add the files tbc (to be converted) to the list tbcList.
+	 * @param name
+	 */
+	public void setTBConvertedList(String name){
+		tbcList.add(name);
+	}
+	
+	/**
+	 * Get the list of files tbc.
+	 * @return tbcList The list of files tbc.
+	 */
+	public ArrayList<String> getTBConvertedList(){
+		return tbcList;
+	}
 }

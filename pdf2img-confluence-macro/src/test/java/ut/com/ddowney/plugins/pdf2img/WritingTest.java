@@ -30,7 +30,7 @@ import com.ddowney.plugins.pdf2img.Writing;
 public class WritingTest {
 
 	private Writing writing;
-	private String uri = "/src/test/resources/test.txt";
+	private String uri = "/pdf2img-confluence-macro/src/main/resources/test.txt";
 	private Path path = Paths.get(uri);
 	
 	private static Page APG = new Page();

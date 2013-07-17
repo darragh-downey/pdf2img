@@ -11,15 +11,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * @author ddowney
  *
  */
 public class Writing{
 
-	private Logger wLog = LoggerFactory.getLogger(Writing.class);
+	private Logger wLog = LogManager.getLogger(Writing.class.getName());
 	private final static Charset ENCODING = StandardCharsets.UTF_8;
 	private Path path;
 	private String uri = "/src/main/resources/fileTracker.txt";
@@ -38,6 +40,7 @@ public class Writing{
 		try{
 			if(!fileExists(uri)){
 				Files.createFile(path);
+				wLog.info("Created file tracker.", path);
 			}
 		}catch(FileAlreadyExistsException e){
 			wLog.error("File already exists", e);
@@ -53,8 +56,10 @@ public class Writing{
 	public boolean fileExists(String uri){
 		Path p = Paths.get(uri);
 		if(p.toFile().exists()){
+			wLog.info("File exists", p);
 			return true;
 		}
+		wLog.info("File doesn't exist", p);
 		return false;
 	}
 
@@ -87,8 +92,8 @@ public class Writing{
 	 * @param pageName
 	 */
 	public void setPages(String pageName){
-		String pageUpper = "***" + pageName.toUpperCase() + "***";
-		writeTo.add(pageUpper);
+			String pageUpper = "***" + pageName.toUpperCase() + "***";
+			writeTo.add(pageUpper);
 	}
 	
 	/**
@@ -98,8 +103,8 @@ public class Writing{
 	 * @param thumb
 	 */
 	public void setAttachments(String origin, String thumb){
-		String representation = origin + " - " + thumb;
-		writeTo.add(representation);
+			String representation = origin + " - " + thumb;
+			writeTo.add(representation);	
 	}
 	
 	/**

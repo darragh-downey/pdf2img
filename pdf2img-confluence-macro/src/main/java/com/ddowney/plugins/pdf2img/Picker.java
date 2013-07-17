@@ -1,7 +1,6 @@
 package com.ddowney.plugins.pdf2img;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,8 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
@@ -32,7 +31,7 @@ import com.atlassian.confluence.spaces.SpaceManager;
  */
 public class Picker {
 
-	private final static Logger pickLog = LoggerFactory.getLogger(Picker.class);
+	private final static Logger pickLog = LogManager.getLogger(Picker.class.getName());
 	private PageManager pageManager;
 	private AttachmentManager attachmentManager;
 	private SpaceManager spaceManager;
@@ -94,6 +93,7 @@ public class Picker {
     	for(Space s : spaces){
     		List<Page> p = pageManager.getPages(s, true);
     		pages.put(s, p);
+    		pickLog.info("Added " + s.getName() + " and list of pages p " + p + " to the Map pages.");
     	}
     	return pages;
     }
@@ -171,117 +171,7 @@ public class Picker {
 	 * @param attachMap
 	 * @return boolean for the sake of unit testing, otherwise void.
 	 */
-	public boolean convert(Map<Page, List<Attachment>> attachMap){
-		Generator gen = new Generator(attachmentManager);
-		Writing wrt = new Writing();
-		Iterator<Page> it = attachMap.keySet().iterator();
-		
-		while(it.hasNext()){
-			Page page = it.next();
-			List<Attachment> attachments = attachMap.get(page);
-			wrt.setPages(page.getTitle());
-			//loop through the attachments attached to current page
-			for(Attachment a : attachments){
-				Attachment attach = null;
-				if(a.getFileExtension().contains("pdf")){
-					InputStream in = attachmentManager.getAttachmentData(a); //get attachments data
-					try {
-						attach = gen.createImage(in, a.getFileName());
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						pickLog.error("IO Exception");
-						pickLog.trace("IO Exception trace", e);
-						e.printStackTrace();
-					}catch (AttachmentDataExistsException e) {
-						//create an image using data, assign to new attachment
-						pickLog.error("Attachment Data Exists Exception");
-						pickLog.trace("Attachment Data Exists Exception trace", e);
-						e.printStackTrace();
-					}
-					try {
-						attachmentManager.saveAttachment(attach, null, in);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						pickLog.error("IO Exception");
-						pickLog.trace("IO Exception trace", e);
-						e.printStackTrace();
-					} //save attachment
-					page.addAttachment(attach); //attach saved attachment to current page
-					wrt.setAttachments(a.getFileName(), attach.getFileName());
-					if(attach.getContent() != page){
-						pickLog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
-						return false;
-					}
-				}else if(a.getFileExtension().contains("doc") || a.getFileExtension().contains("docx")){
-					try {
-						attach = getWordImg(a.getFileName());
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (AttachmentDataExistsException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}				
-					try {
-						attachmentManager.saveAttachment(attach, null, getWordData());
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					page.addAttachment(attach);
-					wrt.setAttachments(a.getFileName(), attach.getFileName());
-					
-				}else if(a.getFileExtension().contains("ppt") || a.getFileExtension().contains("pptx")){
-					try {
-						attach = getPptImg(a.getFileName());
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (AttachmentDataExistsException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					try {
-						attachmentManager.saveAttachment(attach, null, getPptData());
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					page.addAttachment(attach);
-					wrt.setAttachments(a.getFileName(), attach.getFileName());
-					
-				}else if(a.getFileExtension().contains("xls") || a.getFileExtension().contains("xlsx")){
-					try {
-						attach = getXlImg(a.getFileName());
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (AttachmentDataExistsException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						attachmentManager.saveAttachment(attach, null, getXlData());
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					page.addAttachment(attach);
-					wrt.setAttachments(a.getFileName(), attach.getFileName());
-				}
-			}
-		}
-		return true;
-	}
+	
 	
 	/**
 	 * Get the image data of Word2007Logo.png and place in an InputStream.

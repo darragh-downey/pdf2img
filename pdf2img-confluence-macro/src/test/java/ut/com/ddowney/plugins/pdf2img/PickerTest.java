@@ -5,7 +5,6 @@ package ut.com.ddowney.plugins.pdf2img;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,13 +23,11 @@ import static org.mockito.Mockito.*;
 
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.confluence.spaces.Space;
-import com.atlassian.confluence.pages.AttachmentDataExistsException;
 import com.atlassian.confluence.pages.PageManager;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.AttachmentManager;
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.user.*;
-import com.atlassian.user.impl.DefaultUser;
 import com.ddowney.plugins.pdf2img.Picker;
 
 /**
@@ -41,26 +38,15 @@ import com.ddowney.plugins.pdf2img.Picker;
 public class PickerTest {
 	
 	private static Picker picker;
-	private static Space jam;	
-	private static  Space ikea;
-	private static  Space  man;
-	//@Mock 
-	//private static Page Daffy_duck = mock(Page.class);
+	private static Space jam = new Space();	
+	private static  Space ikea = new Space();
+	private static  Space  man = new Space();
+	
 	private static Page DAFFY_DUCK = new Page();
-	//@Mock 
-	//private static Page Bugs_bunny = mock(Page.class);
 	private static Page BUGS_BUNNY = new Page();
-	//@Mock 
-	//private static Page Bed = mock(Page.class);
 	private static Page BED = new Page();
-	//@Mock 
-	//private static Page Table = mock(Page.class);
 	private static Page TABLE = new Page();
-	//@Mock 
-	//private static Page JJ = mock(Page.class);
 	private static Page JJ =  new Page();
-	//@Mock 
-	//private static Page DD = mock(Page.class);
 	private static Page DD = new Page();
 	
 	@Mock 
@@ -83,31 +69,12 @@ public class PickerTest {
 	@Mock
 	private static UserManager userManager;
 	
-	//@SuppressWarnings("unchecked")
-	//@Mock 
-	//private static List<Space> spaces = mock(List.class);
 	private static List<Space> spaces = new ArrayList<Space>();
-	//@SuppressWarnings("unchecked")
-	//@Mock
-	//private static Map<Space, List<Page>> pages = mock(Map.class);
 	private static Map<Space, List<Page>> pages = new HashMap<Space, List<Page>>();
-	//@SuppressWarnings("unchecked")
-	@Mock
-	//private static Map<Page, List<Attachment>> attachments = mock(Map.class);
 	private static Map<Page, List<Attachment>> attachments = new HashMap<Page, List<Attachment>>();
 	
 	@BeforeClass
 	public static void setUp() throws EntityException{		
-		
-		DefaultUser duser = mock(DefaultUser.class);
-		/*duser.setEmail("ddowney@fexco.com");
-		duser.setFullName("Darragh Downey");
-		duser.setPassword("ddowney");*/
-		//User user = duser;
-			
-	    jam = new Space();
-	    ikea = new Space();
-	    man = new Space();
 		
 		jam.setName("jam");
 		ikea.setName("ikea");
@@ -127,9 +94,7 @@ public class PickerTest {
 		
 		spaces.add(ikea);
 		spaces.add(jam);
-		//spaces.add(meat);
 		spaces.add(man);
-		//spaces.add(veg);
 		
 		DAFFY_DUCK.setSpace(jam);
 		DAFFY_DUCK.setParentPage(jam.getHomePage());
@@ -192,6 +157,19 @@ public class PickerTest {
 		}
 		return pages;
 	}
+	
+	private Map<Page, List<Attachment>> getAttachmentMap(){
+		Iterator<Space> it = pages.keySet().iterator();
+		while(it.hasNext()){
+			Space space = it.next();
+			List<Page> page = pages.get(space);
+			for(Page p : page){
+				List<Attachment> att = p.getAttachments();
+				attachments.put(p, att);
+			}
+		}
+		return attachments;
+	}
 
 	private List<Page> getPages() {
 		List<Page> pages= new ArrayList<Page>();
@@ -224,7 +202,6 @@ public class PickerTest {
     	String pdf = "abc.pdf";
     	picker = new Picker(spaceManager, pageManager, attachmentManager);
     	String[] tokens = picker.splitName(pdf);
-    //this makes me shomit	
     	assertEquals("expected pdf got " + tokens[1], "pdf", tokens[1]);
     	assertEquals("expected abc got " + tokens[0], "abc", tokens[0]);
 	}
@@ -234,7 +211,6 @@ public class PickerTest {
 	 */
 	@Test
 	public void testGetAllSpaces() {
-		//picker is not one mocker object
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
 		when(spaceManager.getAllSpaces()).thenReturn(spaces);
 		assertNotNull("Failed to get all spaces.", picker.getAllSpaces());
@@ -247,10 +223,8 @@ public class PickerTest {
 	@Test
 	public void testGetSpaceByName(){
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
-	//	when(jam.getName()).thenReturn("jam");
 		String jame = "jam";
 		String name = jam.getName();
-		//verify(spaceManager).getSpace("j");
 		assertEquals("Not the same", name, jame);
 		assertNotNull("Expected jam, got " + picker.getSpaceByName(jame, spaces), picker.getSpaceByName(jame, spaces));
 	}
@@ -308,12 +282,13 @@ public class PickerTest {
 	 * This test will work if the createImage method in the Generator class works.
 	 * @throws AttachmentDataExistsException 
 	 * @throws IOException 
-	 */
+	 
 	@Test
 	public void testConvert() throws IOException, AttachmentDataExistsException {
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
 		assertTrue("Failed to attach!", picker.convert(attachments));		
 	}
+	*/
 	
 	/**
 	 * 

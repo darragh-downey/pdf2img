@@ -15,8 +15,9 @@ import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
 import com.atlassian.confluence.pages.AttachmentManager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 //import com.mortennobel.imagescaling.*;
 import org.apache.pdfbox.pdmodel.PDDocument; //load the doc
 import org.apache.pdfbox.pdmodel.PDPage; //convert to image
@@ -24,7 +25,7 @@ import org.apache.pdfbox.pdmodel.PDPage; //convert to image
 
 public class Generator {
 	
-	private final static Logger genLog = LoggerFactory.getLogger(Generator.class);
+	private final static Logger genLog = LogManager.getLogger(Generator.class.getName());
 	//private double dime = 1;
 	//private double[] sizes = {0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2}; //ranging from 25% to 200% original size.
 	private AttachmentManager attachmentManager;

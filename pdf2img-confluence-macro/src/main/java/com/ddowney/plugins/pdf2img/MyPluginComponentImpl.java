@@ -3,6 +3,9 @@ package com.ddowney.plugins.pdf2img;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.AttachmentManager;
 import com.atlassian.confluence.pages.Page;
@@ -18,6 +21,7 @@ import com.atlassian.sal.api.ApplicationProperties;
 
 public class MyPluginComponentImpl implements MyPluginComponent
 {
+	private static Logger myLog = LogManager.getLogger(MyPluginComponentImpl.class.getName());
     private final ApplicationProperties applicationProperties;
 	private SpaceManager spaceManager;
 	private PageManager pageManager;
