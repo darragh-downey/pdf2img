@@ -251,8 +251,14 @@ public class PickerTest {
 	 */
 	@Test
 	public void testGetCurrSpacePages(){
-		fail("Not yet implemented");
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
+		
+		when(spaceManager.getSpace("j")).thenReturn(jam);
+		Space j = spaceManager.getSpace("j");
+		when(pageManager.getPages(j, true)).thenReturn(getPages());
+		List<Page> pages = pageManager.getPages(j, true);
+		assertEquals("Failed to get pages for chosen space", pages, picker.getCurrSpacePages(j));
+		verify(pageManager).getPages(j, true);
 	}
 
 	/**
@@ -261,11 +267,11 @@ public class PickerTest {
 	@Test
 	public void testGetAllAttachments() {
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
-		Page mock = mock(Page.class, Mockito.RETURNS_SMART_NULLS);
-		when(attachmentManager.getAttachments(mock)).thenReturn(new ArrayList<Attachment>());
+		
+		when(attachmentManager.getAttachments(DAFFY_DUCK)).thenReturn(new ArrayList<Attachment>());
 		
 		assertNotNull("Either null or not equal to the filtered attachment list", picker.getAllAttachments(getPagesMap()));
-		verify(attachmentManager,times(9)).getAttachments(mock);
+		verify(attachmentManager, times(9)).getAttachments(DAFFY_DUCK);
 	}
 	
 	/**
