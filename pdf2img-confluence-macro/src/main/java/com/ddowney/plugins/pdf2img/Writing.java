@@ -67,7 +67,7 @@ public class Writing{
 	 * Cycle through the ArrayList writeTo and write each String in that List
 	 * to the file denoted by path.
 	 */
-	public void writeFile(ArrayList<String> lines) {
+	public void writeFile(ArrayList<String> lines, Path path) {
 		try{
 			BufferedWriter writer = Files.newBufferedWriter(path, ENCODING);
 			for(String line : lines){

@@ -5,11 +5,19 @@ package ut.com.ddowney.plugins.pdf2img;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.stream.FileImageOutputStream;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -158,17 +166,9 @@ public class PickerTest {
 		return pages;
 	}
 	
-	private Map<Page, List<Attachment>> getAttachmentMap(){
-		Iterator<Space> it = pages.keySet().iterator();
-		while(it.hasNext()){
-			Space space = it.next();
-			List<Page> page = pages.get(space);
-			for(Page p : page){
-				List<Attachment> att = p.getAttachments();
-				attachments.put(p, att);
-			}
-		}
-		return attachments;
+	private List<Attachment> getAttachmentList(Page page){
+		List<Attachment> att = page.getAttachments();
+		return att;
 	}
 
 	private List<Page> getPages() {
@@ -257,8 +257,12 @@ public class PickerTest {
 		Space j = spaceManager.getSpace("j");
 		when(pageManager.getPages(j, true)).thenReturn(getPages());
 		List<Page> pages = pageManager.getPages(j, true);
+		
 		assertEquals("Failed to get pages for chosen space", pages, picker.getCurrSpacePages(j));
-		verify(pageManager).getPages(j, true);
+		assertNotNull("Returned null", picker.getCurrSpacePages(j));
+		
+		verify(spaceManager).getSpace("j");
+		verify(pageManager, times(3)).getPages(j, true);
 	}
 
 	/**
@@ -267,11 +271,8 @@ public class PickerTest {
 	@Test
 	public void testGetAllAttachments() {
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
-		
-		when(attachmentManager.getAttachments(DAFFY_DUCK)).thenReturn(new ArrayList<Attachment>());
-		
+				
 		assertNotNull("Either null or not equal to the filtered attachment list", picker.getAllAttachments(getPagesMap()));
-		verify(attachmentManager, times(9)).getAttachments(DAFFY_DUCK);
 	}
 	
 	/**
@@ -279,8 +280,9 @@ public class PickerTest {
 	 */
 	@Test
 	public void testGetAttachmentsInCurrSpace(){
-		fail("Not yet implemented");
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
+		
+		assertNotNull("", picker.getAttachmentsInCurrSpace(getPages()));
 	}
 
 	/**
@@ -297,12 +299,43 @@ public class PickerTest {
 	*/
 	
 	/**
+	 * @throws FileNotFoundException 
 	 * 
 	 */
 	@Test
-	public void testGetWordData(){
-		fail("Not yet implemented");
+	public void testGetWordData() throws FileNotFoundException{
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
+		InputStream in = null;
+		OutputStream out = null;
+		File file = new File("C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\word.png");
+		try{
+			in = picker.getWordData();
+			out = new FileOutputStream(file);
+			int read = 0;
+			byte[] bytes = new byte[1024];
+			
+			while((read = in.read(bytes)) != -1 ){
+				out.write(bytes, 0, read);
+			}
+		}catch(IOException e){
+			e.printStackTrace();
+		}finally{
+			if(in != null){
+				try{
+					in.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+			if(out != null){
+				try{
+					out.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+		}
+		assertNotNull("Returned null", file);
 	}
 	
 	/**

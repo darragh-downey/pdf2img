@@ -30,8 +30,11 @@ import com.ddowney.plugins.pdf2img.Writing;
 public class WritingTest {
 
 	private Writing writing;
-	private String uri = "/pdf2img-confluence-macro/src/main/resources/test.txt";
-	private Path path = Paths.get(uri);
+	private String uri = "pdf2img-confluence-macro/src/main/resources/test_Converted-files.txt";
+	private String uri_two = "C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\src\\main\\resources\\Converted-files.txt";
+	private File file = new File("C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\src\\main\\resources\\Converted-files.txt");
+	private Path path = file.toPath();
+	//private Path path = Paths.get(uri);
 	
 	private static Page APG = new Page();
 	private static Page BPG = new Page();
@@ -96,6 +99,7 @@ public class WritingTest {
 		writing.createFile(uri);
 		Path p = Paths.get(uri);
 		assertEquals("File doesn't exist...", path.toFile(), p.toFile());
+		assertNotNull("The file was not created...", p.toFile());
 	}
 
 	/**
@@ -103,7 +107,7 @@ public class WritingTest {
 	 */
 	@Test
 	public void testFileExists() {
-		assertTrue("File doesn't exist...",writing.fileExists(uri));
+		assertTrue("File doesn't exist...", writing.fileExists(uri_two));
 	}
 
 	/**
@@ -111,7 +115,12 @@ public class WritingTest {
 	 */
 	@Test
 	public void testWriteFile() {
-		
+		ArrayList<String> lines = new ArrayList<String>();
+		lines.add("***PAGENAME***");
+		lines.add("fish.pdf");
+		lines.add("tree.pdf");
+		writing.writeFile(lines, path);
+		assertNotNull("File is empty", file);
 	}
 
 	/**

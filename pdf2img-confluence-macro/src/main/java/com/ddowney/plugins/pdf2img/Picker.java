@@ -1,5 +1,6 @@
 package com.ddowney.plugins.pdf2img;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.TreeSet;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.wink.common.internal.utils.FileLoader;
 
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
@@ -164,14 +166,7 @@ public class Picker {
 			attachments.put(p, attachmentManager.getAttachments(p));
 		}
 		return attachments;
-	}
-	
-	/**
-	 * Convert the given list of attachments to png format.
-	 * @param attachMap
-	 * @return boolean for the sake of unit testing, otherwise void.
-	 */
-	
+	}	
 	
 	/**
 	 * Get the image data of Word2007Logo.png and place in an InputStream.
@@ -179,7 +174,10 @@ public class Picker {
 	 * @throws FileNotFoundException
 	 */
 	public InputStream getWordData() throws FileNotFoundException{
-		InputStream doc = getClass().getClassLoader().getResourceAsStream("resources\\images\\Word2007Logo.png");
+		String path = "src/main/resources/images/Word2007Logo.png";
+		//ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		InputStream doc = this.getClass().getResourceAsStream(path);
+		//InputStream doc = new FileInputStream("C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\src\\main\\resources\\images\\Word2007Logo.png");
 		return doc;
 	}
 	
