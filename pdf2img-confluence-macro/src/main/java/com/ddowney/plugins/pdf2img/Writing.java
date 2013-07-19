@@ -92,7 +92,7 @@ public class Writing{
 	 * @param pageName
 	 */
 	public void setPages(String pageName){
-			String pageUpper = "***" + pageName.toUpperCase() + "***";
+			String pageUpper = "*** " + pageName.toUpperCase() + " ***";
 			writeTo.add(pageUpper);
 	}
 	
@@ -103,7 +103,7 @@ public class Writing{
 	 * @param thumb
 	 */
 	public void setAttachments(String origin, String thumb){
-			String representation = origin + " - " + thumb;
+			String representation = origin + " -> " + thumb;
 			writeTo.add(representation);	
 	}
 	
