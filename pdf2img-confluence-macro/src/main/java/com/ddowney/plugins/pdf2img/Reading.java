@@ -4,7 +4,6 @@
 package com.ddowney.plugins.pdf2img;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -24,22 +23,32 @@ public class Reading{
 	
 	private Logger rLog = LogManager.getLogger(Reading.class.getName());
 	private Path path; 
-	private File file;
 	private ArrayList<String> tbcList = new ArrayList<String>();
 	private final static Charset ENCODING = StandardCharsets.UTF_8;
-	
-	public Reading(Path path, File file){
-		this.path = path;
-		this.file = file;
+		
+	public Reading(){
 	}
 
-	public File getFile() {
-		return file;
+	/**
+	 * Get the file to read at the end of the URL/uri.
+	 * @param uri
+	 * @return
+	 */
+	public Path getFile(String uri) {
+		Writing writing = new Writing();
+		path = writing.getFile(uri);
+		return path;
 	}
 
-	public void readFile(ArrayList<String> attachNames) {
+	/**
+	 * Read the given file and create a list of files that are to be converted by
+	 * comparing the filenames in the given list to the filenames in the file.
+	 * @param attachNames
+	 * @param uri
+	 */
+	public void readFile(ArrayList<String> attachNames, String uri) {
 		try{
-			BufferedReader reader = Files.newBufferedReader(path, ENCODING);
+			BufferedReader reader = Files.newBufferedReader(getFile(uri), ENCODING);
 			String line = null;
 			while((line = reader.readLine()) != null){
 				for(String names : attachNames){
@@ -64,7 +73,7 @@ public class Reading{
 	}
 	
 	/**
-	 * Get the list of files tbc.
+	 * Get the list of files tbc (to be converted).
 	 * @return tbcList The list of files tbc.
 	 */
 	public ArrayList<String> getTBConvertedList(){

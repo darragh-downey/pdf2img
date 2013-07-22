@@ -5,11 +5,16 @@ package ut.com.ddowney.plugins.pdf2img;
 
 import static org.junit.Assert.*;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.ddowney.plugins.pdf2img.Reading;
 
 /**
  * @author ddowney
@@ -17,6 +22,8 @@ import org.junit.Test;
  */
 public class ReadingTest {
 
+	private Reading read;
+	private String uri;
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -36,6 +43,8 @@ public class ReadingTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		read = new Reading();
+		uri = "test_Converted-files.txt";
 	}
 
 	/**
@@ -50,7 +59,7 @@ public class ReadingTest {
 	 */
 	@Test
 	public void testReading() {
-		fail("Not yet implemented");
+		assertNotNull("Failed to initialise object", read);
 	}
 
 	/**
@@ -58,7 +67,8 @@ public class ReadingTest {
 	 */
 	@Test
 	public void testGetFile() {
-		fail("Not yet implemented");
+		Path path = read.getFile(uri);
+		assertTrue("File doesn't exist", path.toFile().exists());
 	}
 
 	/**
@@ -66,7 +76,8 @@ public class ReadingTest {
 	 */
 	@Test
 	public void testReadFile() {
-		fail("Not yet implemented");
+		ArrayList<String> attachNames = new ArrayList<String>();
+		read.readFile(attachNames, uri);
 	}
 
 }

@@ -58,7 +58,7 @@ public class GeneratorTest {
 
 	/**
 	 * Test method for {@link com.ddowney.plugins.tgen.Generator#setAttachmentManager(com.atlassian.confluence.pages.AttachmentManager)}.
-	 * unecessary test due to the fact that it's included in the {@link com.ddowney.plugins.tgen.Generator#getAttachmentManager()} test.	 
+	 * unnecessary test due to the fact that it's included in the {@link com.ddowney.plugins.tgen.Generator#getAttachmentManager()} test.	 
 	@Test
 	public void testSetAttachmentManager() {
 		//Generator gen = new Generator(attachmentManager);

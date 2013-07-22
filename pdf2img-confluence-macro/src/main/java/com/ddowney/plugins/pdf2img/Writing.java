@@ -4,6 +4,8 @@
 package com.ddowney.plugins.pdf2img;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
@@ -24,19 +26,19 @@ public class Writing{
 	private Logger wLog = LogManager.getLogger(Writing.class.getName());
 	private final static Charset ENCODING = StandardCharsets.UTF_8;
 	private Path path;
-	private String uri = "/src/main/resources/fileTracker.txt";
+	//private String uri = "test_Converted-files.txt";
+	private ClassLoader loader = Thread.currentThread().getContextClassLoader();
 	
 	private ArrayList<String> writeTo;
 	
 	public Writing(){
-		
 	}
 	
 	/**
-	 * Create the file 'fileTracker.txt'. If it already exists throw an exception.
+	 * Create the file for tracking, if it already exists throw an exception.
 	 */
 	public void createFile(String uri){
-		path = Paths.get(uri);
+		path = getFile(uri);
 		try{
 			if(!fileExists(uri)){
 				Files.createFile(path);
@@ -44,17 +46,37 @@ public class Writing{
 			}
 		}catch(FileAlreadyExistsException e){
 			wLog.error("File already exists", e);
+			wLog.catching(e);
 		}catch(IOException e){
 			wLog.error("IO error", e);
+			wLog.catching(e);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public Path getFile(String uri){
+		URL url = loader.getResource(uri);
+		try {
+			path = Paths.get(url.toURI());
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			wLog.error("URI Syntax Exception");
+			wLog.catching(e);
+		}
+		return path;
 	}
 	
 	/**
 	 * Checks to see if the file already exists.
 	 * @return boolean True for it exists, False otherwise.
 	 */
-	public boolean fileExists(String uri){
-		Path p = Paths.get(uri);
+	public boolean fileExists(String uri){ 
+		Path p = getFile(uri); 
 		if(p.toFile().exists()){
 			wLog.info("File exists", p);
 			return true;
@@ -67,7 +89,8 @@ public class Writing{
 	 * Cycle through the ArrayList writeTo and write each String in that List
 	 * to the file denoted by path.
 	 */
-	public void writeFile(ArrayList<String> lines, Path path) {
+	public void writeFile(ArrayList<String> lines, String uri) {
+		path = getFile(uri); 
 		try{
 			BufferedWriter writer = Files.newBufferedWriter(path, ENCODING);
 			for(String line : lines){
@@ -76,13 +99,13 @@ public class Writing{
 			}
 		}catch(IOException e){
 			wLog.error("IOException ", e);
-			wLog.trace("", e);
+			wLog.catching(e);
 		}catch(UnsupportedOperationException e){
 			wLog.error("Unsupported Operation Exception", e);
-			wLog.trace("", e);
+			wLog.catching(e);
 		}catch(SecurityException e){
 			wLog.error("Security Exception", e);
-			wLog.trace("", e);
+			wLog.catching(e);
 		}
 	}
 	
@@ -102,9 +125,8 @@ public class Writing{
 	 * @param origin
 	 * @param thumb
 	 */
-	public void setAttachments(String origin, String thumb){
-			String representation = origin + " -> " + thumb;
-			writeTo.add(representation);	
+	public void setAttachments(String origin){
+			writeTo.add(origin);	
 	}
 	
 	/**

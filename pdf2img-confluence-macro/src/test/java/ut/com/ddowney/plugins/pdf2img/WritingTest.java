@@ -15,12 +15,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mock;
-
 import com.atlassian.confluence.pages.Attachment;
-import com.atlassian.confluence.pages.AttachmentManager;
 import com.atlassian.confluence.pages.Page;
-import com.atlassian.confluence.pages.PageManager;
 import com.ddowney.plugins.pdf2img.Writing;
 
 /**
@@ -30,9 +26,9 @@ import com.ddowney.plugins.pdf2img.Writing;
 public class WritingTest {
 
 	private Writing writing;
-	private String uri = "pdf2img-confluence-macro/src/main/resources/test_Converted-files.txt";
-	private String uri_two = "C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\src\\main\\resources\\Converted-files.txt";
-	private File file = new File("C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\src\\main\\resources\\Converted-files.txt");
+	private String uri = "test_Converted-files.txt";
+	//private String uri_two = "C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\src\\main\\resources\\test_Converted-files.txt";
+	private File file = new File(uri);
 	private Path path = file.toPath();
 	//private Path path = Paths.get(uri);
 	
@@ -107,7 +103,7 @@ public class WritingTest {
 	 */
 	@Test
 	public void testFileExists() {
-		assertTrue("File doesn't exist...", writing.fileExists(uri_two));
+		assertTrue("File doesn't exist...", writing.fileExists(uri));
 	}
 
 	/**
@@ -116,10 +112,10 @@ public class WritingTest {
 	@Test
 	public void testWriteFile() {
 		ArrayList<String> lines = new ArrayList<String>();
-		lines.add("***PAGENAME***");
+		lines.add("*** PAGENAME ***");
 		lines.add("fish.pdf");
 		lines.add("tree.pdf");
-		writing.writeFile(lines, path);
+		writing.writeFile(lines, uri);
 		assertNotNull("File is empty", file);
 	}
 
@@ -149,14 +145,14 @@ public class WritingTest {
 		AAAT.setFileName("Pinochio.png");
 		BBAT.setFileName("Moby_Dick.png");
 		CCAT.setFileName("The_Good,The_Bad_And_The_Ugly.pdf");
-		writing.setAttachments(AAT.getFileName(), AAAT.getFileName());
-		writing.setAttachments(BAT.getFileName(), BBAT.getFileName());
-		writing.setAttachments(CAT.getFileName(), CCAT.getFileName());
+		writing.setAttachments(AAT.getFileName());
+		writing.setAttachments(BAT.getFileName());
+		writing.setAttachments(CAT.getFileName());
 		assertNotNull("Didn't add any of the filenames to the list", writing.getLines());
 	}
 	
 	public void testGetLines(){
-		
+		fail("Not yet implemented");
 	}
 
 }

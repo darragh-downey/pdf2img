@@ -78,7 +78,7 @@ public class Convert {
 						e.printStackTrace();
 					} //save attachment
 					page.addAttachment(attach); //attach saved attachment to current page
-					wrt.setAttachments(a.getFileName(), attach.getFileName());
+					wrt.setAttachments(a.getFileName());
 					if(attach.getContent() != page){
 						cLog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
 						return false;
@@ -103,7 +103,7 @@ public class Convert {
 						e.printStackTrace();
 					}
 					page.addAttachment(attach);
-					wrt.setAttachments(a.getFileName(), attach.getFileName());
+					wrt.setAttachments(a.getFileName());
 					
 				}else if(a.getFileExtension().contains("ppt") || a.getFileExtension().contains("pptx")){
 					try {
@@ -125,7 +125,7 @@ public class Convert {
 						e.printStackTrace();
 					}
 					page.addAttachment(attach);
-					wrt.setAttachments(a.getFileName(), attach.getFileName());
+					wrt.setAttachments(a.getFileName());
 					
 				}else if(a.getFileExtension().contains("xls") || a.getFileExtension().contains("xlsx")){
 					try {
@@ -147,7 +147,7 @@ public class Convert {
 						e.printStackTrace();
 					}
 					page.addAttachment(attach);
-					wrt.setAttachments(a.getFileName(), attach.getFileName());
+					wrt.setAttachments(a.getFileName());
 				}
 			}
 		}
