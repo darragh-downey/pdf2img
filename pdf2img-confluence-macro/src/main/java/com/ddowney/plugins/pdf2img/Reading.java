@@ -27,13 +27,16 @@ public class Reading{
 	private ArrayList<String> tbcList = new ArrayList<String>();
 	private final static Charset ENCODING = StandardCharsets.UTF_8;
 		
+	/**
+	 * Constructor.
+	 */
 	public Reading(){
 	}
 
 	/**
-	 * Get the file to read at the end of the URL/uri.
-	 * @param uri
-	 * @return
+	 * Get the path to the file to read in the classpath.
+	 * @param uri The file to read from the classpath.
+	 * @return path The path to the file within the classpath. 
 	 */
 	public Path getFile(String uri) {
 		Writing writing = new Writing();
@@ -43,7 +46,7 @@ public class Reading{
 	
 	/**
 	 * Check to see if a file is empty, not including empty Strings/lines.
-	 * @param uri The file to check
+	 * @param uri The file to check.
 	 * @return boolean True if empty, False otherwise.
 	 */
 	public boolean checkEmpty(String uri){
@@ -71,6 +74,7 @@ public class Reading{
 	 * comparing the filenames in the given list to the filenames in the file.
 	 * @param attachNames
 	 * @param uri
+	 * @return {@link com.ddowney.plugins.pdf2img.Reading#getTBConvertedList()}
 	 */
 	public ArrayList<String> readFile(ArrayList<String> attachNames, String uri) {
 		ArrayList<String> list = new ArrayList<String>();

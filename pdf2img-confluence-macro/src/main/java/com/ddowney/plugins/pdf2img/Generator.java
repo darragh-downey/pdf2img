@@ -31,14 +31,26 @@ public class Generator {
 	private AttachmentManager attachmentManager;
 	private Attachment attachment;
 	
+	/**
+	 * Constructor
+	 * @param attachmentManager
+	 */
 	public Generator(AttachmentManager attachmentManager){
 		this.setAttachmentManager(attachmentManager);
 	}
 	
+	/**
+	 * Get the AttachmentManager.
+	 * @return attachmentManager
+	 */
 	public AttachmentManager getAttachmentManager() {
 		return attachmentManager;
 	}
 
+	/**
+	 * Set the AttachmentManager. 
+	 * @param attachmentManager
+	 */
 	public void setAttachmentManager(AttachmentManager attachmentManager) {
 		this.attachmentManager = attachmentManager;
 	}
@@ -55,15 +67,33 @@ public class Generator {
 	}
 	*/
 	
+	/**
+	 * Split the given filename into two parts, the name and the file extension.
+	 * @param fileName The name of the file to split
+	 * @return tokens A String[] that contains the filename and the file extension, for example
+	 * 				  
+	 * tokens[0] = "filename";
+	 * tokens[1] = "pdf"; //the '.' is removed from the filename. 
+	 */
 	private static String[] splitName(String fileName){ 
 		String[] tokens = fileName.split("\\.(?=[^\\.]+$)");
 		return tokens;
 	}
 	
+	/**
+	 * Set Attachment data manually, ie. create a new Attachment.  
+	 * @param attachment 
+	 * @param attachmentData
+	 * @throws AttachmentDataExistsException
+	 */
 	private void setAttachment(Attachment attachment, InputStream attachmentData) throws AttachmentDataExistsException{
 		attachmentManager.setAttachmentData(attachment, attachmentData);
 	}
 	
+	/**
+	 * Get the Attachment.
+	 * @return attachment
+	 */
 	public Attachment getAttachment(){
 		return attachment;
 	}
@@ -80,6 +110,15 @@ public class Generator {
 		return buffOut;
 	}
 	*/
+	
+	/**
+	 * This method converts a PDDocument page to a png/jpg. 
+	 * @param in The pdf document.
+	 * @param name The name of the pdf document.
+	 * @return attachment Return the newly created image as an Attachment.
+	 * @throws IOException
+	 * @throws AttachmentDataExistsException
+	 */
 	public Attachment createImage(InputStream in, String name) throws IOException, AttachmentDataExistsException 
     {
 			//dime = dimensions;

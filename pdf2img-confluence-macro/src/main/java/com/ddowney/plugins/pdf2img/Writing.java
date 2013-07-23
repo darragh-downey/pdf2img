@@ -36,6 +36,7 @@ public class Writing{
 	
 	/**
 	 * Create the file for tracking, if it already exists throw an exception.
+	 * @param uri
 	 */
 	public void createFile(String uri){
 		path = getFile(uri);
@@ -54,7 +55,7 @@ public class Writing{
 	}
 	
 	/**
-	 * 
+	 * Get the file from the classpath.
 	 * @param uri
 	 * @return
 	 */
@@ -86,8 +87,9 @@ public class Writing{
 	}
 
 	/**
-	 * Cycle through the ArrayList writeTo and write each String in that List
-	 * to the file denoted by path.
+	 * Write to the file, the filenames of the converted attachments.
+	 * @param lines ArrayList<String> The filenames to write.
+	 * @param uri String The file within the classpath to write to.
 	 */
 	public void writeFile(ArrayList<String> lines, String uri) {
 		path = getFile(uri); 
@@ -125,7 +127,7 @@ public class Writing{
 	/**
 	 * Get the title of the page with the attachments on it convert it to upper case
 	 * and surround with '*'. Add the new string to the ArrayList writeTo.
-	 * @param pageName
+	 * @param pageName The title of the Page with converted Attachments.
 	 */
 	public void setPages(String pageName){
 			String pageUpper = "*** " + pageName.toUpperCase() + " ***";
@@ -135,16 +137,15 @@ public class Writing{
 	/**
 	 * Get the filenames of the origin file and the thumbnail file.
 	 * Stick them together and add the new string to the ArrayList writeTo.
-	 * @param origin
-	 * @param thumb
+	 * @param origin The filename of the Attachment that was converted.
 	 */
 	public void setAttachments(String origin){
 			writeTo.add(origin);	
 	}
 	
 	/**
-	 * Just return the ArrayList with all of the lines in it.
-	 * @return writeTo ArrayList<String>
+	 * Just return the ArrayList with all of the lines to be written to the file in it.
+	 * @return writeTo The Page titles and Attachment filenames to be written to the file.
 	 */
 	public ArrayList<String> getLines(){
 		return writeTo;

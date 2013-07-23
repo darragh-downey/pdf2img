@@ -40,7 +40,7 @@ public class GeneratorTest {
 		gen = new Generator(attachmentManager);
 	}
 	/**
-	 * Test method for {@link com.ddowney.plugins.tgen.Generator#Generator(com.atlassian.confluence.pages.AttachmentManager)}.
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Generator#Generator(com.atlassian.confluence.pages.AttachmentManager)}.
 	 */
 	@Test
 	public void testGenerator() {
@@ -48,7 +48,7 @@ public class GeneratorTest {
 	}
 
 	/**
-	 * Test method for {@link com.ddowney.plugins.tgen.Generator#getAttachmentManager()}.
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Generator#getAttachmentManager()}.
 	 */
 	@Test
 	public void testGetAttachmentManager() {
@@ -57,7 +57,7 @@ public class GeneratorTest {
 	}
 
 	/**
-	 * Test method for {@link com.ddowney.plugins.tgen.Generator#setAttachmentManager(com.atlassian.confluence.pages.AttachmentManager)}.
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Generator#setAttachmentManager(com.atlassian.confluence.pages.AttachmentManager)}.
 	 * unnecessary test due to the fact that it's included in the {@link com.ddowney.plugins.tgen.Generator#getAttachmentManager()} test.	 
 	@Test
 	public void testSetAttachmentManager() {
@@ -67,7 +67,7 @@ public class GeneratorTest {
 	*/
 
 	/**
-	 * Test method for {@link com.ddowney.plugins.tgen.Generator#createImage(java.io.InputStream, java.lang.String, double)}.
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Generator#createImage(java.io.InputStream, java.lang.String, double)}.
 	 * @throws AttachmentDataExistsException 
 	 * @throws IOException 
 	 */
