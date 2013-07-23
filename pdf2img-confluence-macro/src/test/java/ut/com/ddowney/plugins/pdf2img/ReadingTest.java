@@ -7,7 +7,6 @@ import static org.junit.Assert.*;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -77,7 +76,21 @@ public class ReadingTest {
 	@Test
 	public void testReadFile() {
 		ArrayList<String> attachNames = new ArrayList<String>();
-		read.readFile(attachNames, uri);
+		attachNames.add("*** PAGENAME ***");
+		attachNames.add("The_Hobbit.pdf");
+		attachNames.add("A_Game_Of_Thrones.pdf");
+		attachNames.add("Tales_Of_Earthsea.pdf");
+		ArrayList<String> list = read.readFile(attachNames, uri);
+		assertEquals("Expected result", attachNames, list);
+		assertNotSame("Expected a difference", attachNames, list);
+	}
+	
+	/**
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Reading#checkEmpty(String)}.
+	 */
+	@Test
+	public void testCheckEmpty(){
+		assertTrue("The file isn't empty", read.checkEmpty(uri));
 	}
 
 }

@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,6 +40,31 @@ public class Reading{
 		path = writing.getFile(uri);
 		return path;
 	}
+	
+	/**
+	 * Check to see if a file is empty, not including empty Strings/lines.
+	 * @param uri The file to check
+	 * @return boolean True if empty, False otherwise.
+	 */
+	public boolean checkEmpty(String uri){
+		try {
+			BufferedReader reader = Files.newBufferedReader(getFile(uri), ENCODING);
+			String line = null;
+			int count = 0;
+			while((line = reader.readLine()) != null){
+				if(!line.isEmpty()){
+					count++;
+				}
+				if(count >= 1){
+					return false;
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
 
 	/**
 	 * Read the given file and create a list of files that are to be converted by
@@ -46,37 +72,39 @@ public class Reading{
 	 * @param attachNames
 	 * @param uri
 	 */
-	public void readFile(ArrayList<String> attachNames, String uri) {
+	public ArrayList<String> readFile(ArrayList<String> attachNames, String uri) {
+		ArrayList<String> list = new ArrayList<String>();
 		try{
 			BufferedReader reader = Files.newBufferedReader(getFile(uri), ENCODING);
 			String line = null;
 			while((line = reader.readLine()) != null){
-				for(String names : attachNames){
-					if(!line.equals(names)){
-						setTBConvertedList(names);
-					}
-				}
+				list.add(line);
+			}
+			for(String a : attachNames){
+				setTBConvertedList(list.contains(a) ? null : a);
 			}
 		}catch(IOException e){
 			rLog.error("IO Exception", e);
 		}catch(SecurityException e){
 			rLog.error("Security Exception", e);
 		}
+		return getTBConvertedList();
 	}
 	
 	/**
 	 * Add the files tbc (to be converted) to the list tbcList.
 	 * @param name
 	 */
-	public void setTBConvertedList(String name){
-		tbcList.add(name);
+	private void setTBConvertedList(String name){
+			tbcList.add(name);
 	}
 	
 	/**
 	 * Get the list of files tbc (to be converted).
 	 * @return tbcList The list of files tbc.
 	 */
-	public ArrayList<String> getTBConvertedList(){
+	private ArrayList<String> getTBConvertedList(){
+		tbcList.removeAll(Collections.singleton(null));
 		return tbcList;
 	}
 }

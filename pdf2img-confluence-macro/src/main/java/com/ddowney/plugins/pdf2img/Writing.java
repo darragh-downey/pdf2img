@@ -91,11 +91,14 @@ public class Writing{
 	 */
 	public void writeFile(ArrayList<String> lines, String uri) {
 		path = getFile(uri); 
+		Charset charset = Charset.defaultCharset();
+		BufferedWriter bwriter = null;
 		try{
-			BufferedWriter writer = Files.newBufferedWriter(path, ENCODING);
+			bwriter = Files.newBufferedWriter(path, charset);
 			for(String line : lines){
-				writer.write(line);
-				writer.newLine();
+				bwriter.write(line, 0, line.length());
+				bwriter.newLine();
+				bwriter.flush();
 			}
 		}catch(IOException e){
 			wLog.error("IOException ", e);
@@ -106,6 +109,16 @@ public class Writing{
 		}catch(SecurityException e){
 			wLog.error("Security Exception", e);
 			wLog.catching(e);
+		}finally{
+			if(bwriter != null){
+				try {
+					bwriter.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					wLog.error("IO Exception", e);
+					wLog.catching(e);
+				}	
+			}
 		}
 	}
 	
