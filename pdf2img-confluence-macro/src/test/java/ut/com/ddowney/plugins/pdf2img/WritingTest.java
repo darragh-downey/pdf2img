@@ -151,6 +151,9 @@ public class WritingTest {
 		assertNotNull("Didn't add any of the filenames to the list", writing.getLines());
 	}
 	
+	/**
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Writing#getLines()}. 
+	 */
 	public void testGetLines(){
 		fail("Not yet implemented");
 	}

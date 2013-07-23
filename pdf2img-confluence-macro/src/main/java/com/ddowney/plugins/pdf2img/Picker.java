@@ -37,7 +37,14 @@ public class Picker {
 	private PageManager pageManager;
 	private AttachmentManager attachmentManager;
 	private SpaceManager spaceManager;
+	private ClassLoader loader = Thread.currentThread().getContextClassLoader();
 	
+	/**
+	 * Constructor
+	 * @param spaceManager
+	 * @param pageManager
+	 * @param attachmentManager
+	 */
 	public Picker(SpaceManager spaceManager, PageManager pageManager, AttachmentManager attachmentManager){
 		this.spaceManager = spaceManager;
 		this.pageManager = pageManager;
@@ -123,6 +130,12 @@ public class Picker {
 			String[] tokens = splitName(a.getFileName());
 			if(!compare.add(tokens[0]) && tokens[1].equals("pdf")){
 				filteredList.add(a);
+			}else if(!compare.add(tokens[0]) && (tokens[1].equals("doc") || tokens[1].equals("docx"))){
+				filteredList.add(a);
+			}else if(!compare.add(tokens[0]) && (tokens[1].equals("ppt") || tokens[1].equals("pptx"))){
+				filteredList.add(a);
+			}else if(!compare.add(tokens[0]) && (tokens[1].equals("xls") || tokens[1].equals("xlsx"))){
+				filteredList.add(a);
 			}
 		}	
 		return filteredList;
@@ -163,7 +176,9 @@ public class Picker {
 		Map<Page, List<Attachment>> attachments = new HashMap<Page, List<Attachment>>();
 		
 		for(Page p : pages){
-			attachments.put(p, attachmentManager.getAttachments(p));
+			List<Attachment> attach = new ArrayList<Attachment>();
+			attach = attachmentManager.getAttachments(p);
+			attachments.put(p, filterAttachments(attach));
 		}
 		return attachments;
 	}	
@@ -174,10 +189,8 @@ public class Picker {
 	 * @throws FileNotFoundException
 	 */
 	public InputStream getWordData() throws FileNotFoundException{
-		String path = "src/main/resources/images/Word2007Logo.png";
-		//ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		InputStream doc = this.getClass().getResourceAsStream(path);
-		//InputStream doc = new FileInputStream("C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\src\\main\\resources\\images\\Word2007Logo.png");
+		String path = "images/Word2007Logo.png";
+		InputStream doc = loader.getResourceAsStream(path);
 		return doc;
 	}
 	
@@ -187,7 +200,8 @@ public class Picker {
 	 * @throws FileNotFoundException
 	 */
 	public InputStream getPptData() throws FileNotFoundException{
-		InputStream ppt = getClass().getClassLoader().getResourceAsStream("resources\\images\\pptLogo.png");
+		String path = "images/pptLogo.png";
+		InputStream ppt = loader.getResourceAsStream(path);
 		return ppt;
 	}
 	
@@ -197,7 +211,8 @@ public class Picker {
 	 * @throws FileNotFoundException
 	 */
 	public InputStream getXlData() throws FileNotFoundException{
-		InputStream xl = getClass().getClassLoader().getResourceAsStream("resources\\images\\excelLogo.png");
+		String path = "images/excelLogo.png";
+		InputStream xl = loader.getResourceAsStream(path);
 		return xl;
 	}
 	
@@ -242,7 +257,7 @@ public class Picker {
 	public Attachment getXlImg(String filename) throws FileNotFoundException, AttachmentDataExistsException{
 		Attachment xl = new Attachment();
 		xl.setFileName(filename + ".png");
-		attachmentManager.setAttachmentData(xl, getWordData());
+		attachmentManager.setAttachmentData(xl, getXlData());
 		return xl;	
 	}
 	

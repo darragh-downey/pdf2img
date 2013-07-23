@@ -6,9 +6,13 @@ package com.ddowney.plugins.pdf2img;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+
 
 
 
@@ -41,6 +45,23 @@ public class Convert {
 		this.attachmentManager = attachmentManager;
 	}
 	
+	public Map<Page, List<Attachment>> compareLists(Map<Page, List<Attachment>> attachMap, ArrayList<String> diff){
+		Map<Page, List<Attachment>> attachtocon = new HashMap<Page, List<Attachment>>();
+		Iterator<Page> it = attachMap.keySet().iterator();
+		while(it.hasNext()){
+			Page page = it.next();
+			List<Attachment> att = attachMap.get(page);
+			for(Attachment a : att){
+				for(String s : diff){
+					if(s.compareTo(a.getFileName()) == 0){
+						
+					}
+				}
+			}
+		}
+		return attachtocon;
+	}
+	
 	public boolean conversion(Map<Page, List<Attachment>> attachMap){
 		Generator gen = new Generator(attachmentManager);
 		Picker pick = new Picker(spaceManager, pageManager, attachmentManager);
@@ -62,12 +83,10 @@ public class Convert {
 						// TODO Auto-generated catch block
 						cLog.error("IO Exception");
 						cLog.trace("IO Exception trace", e);
-						e.printStackTrace();
 					}catch (AttachmentDataExistsException e) {
 						//create an image using data, assign to new attachment
 						cLog.error("Attachment Data Exists Exception");
 						cLog.trace("Attachment Data Exists Exception trace", e);
-						e.printStackTrace();
 					}
 					try {
 						attachmentManager.saveAttachment(attach, null, in);
@@ -75,7 +94,6 @@ public class Convert {
 						// TODO Auto-generated catch block
 						cLog.error("IO Exception");
 						cLog.trace("IO Exception trace", e);
-						e.printStackTrace();
 					} //save attachment
 					page.addAttachment(attach); //attach saved attachment to current page
 					wrt.setAttachments(a.getFileName());
@@ -88,19 +106,23 @@ public class Convert {
 						attach = pick.getWordImg(a.getFileName());
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						cLog.error("File Not Found Exception", e);
+						cLog.catching(e);
 					} catch (AttachmentDataExistsException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						cLog.error("Attachment Data Exists Exception", e);
+						cLog.catching(e);
 					}				
 					try {
 						attachmentManager.saveAttachment(attach, null, pick.getWordData());
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						cLog.error("File Not Found Exception", e);
+						cLog.catching(e);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						cLog.error("IO Exception", e);
+						cLog.catching(e);
 					}
 					page.addAttachment(attach);
 					wrt.setAttachments(a.getFileName());
@@ -110,19 +132,23 @@ public class Convert {
 						attach = pick.getPptImg(a.getFileName());
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						cLog.error("File Not Found Exception", e);
+						cLog.catching(e);
 					} catch (AttachmentDataExistsException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						cLog.error("Attachment Data Exists Exception", e);
+						cLog.catching(e);
 					}
 					try {
 						attachmentManager.saveAttachment(attach, null, pick.getPptData());
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						cLog.error("File Not Found Exception", e);
+						cLog.catching(e);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						cLog.error("IO Exception", e);
+						cLog.catching(e);
 					}
 					page.addAttachment(attach);
 					wrt.setAttachments(a.getFileName());
@@ -130,21 +156,25 @@ public class Convert {
 				}else if(a.getFileExtension().contains("xls") || a.getFileExtension().contains("xlsx")){
 					try {
 						attach = pick.getXlImg(a.getFileName());
-					} catch (FileNotFoundException e1) {
+					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (AttachmentDataExistsException e1) {
+						cLog.error("File Not Found Exception", e);
+						cLog.catching(e);
+					} catch (AttachmentDataExistsException e) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						cLog.error("Attachment Data Exists Exception", e);
+						cLog.catching(e);
 					}
 					try {
 						attachmentManager.saveAttachment(attach, null, pick.getXlData());
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						cLog.error("File Not Found Exception", e);
+						cLog.catching(e);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						cLog.error("IO Exception", e);
+						cLog.catching(e);
 					}
 					page.addAttachment(attach);
 					wrt.setAttachments(a.getFileName());

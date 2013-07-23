@@ -186,7 +186,7 @@ public class PickerTest {
 		attachments.clear();
 	}
 	/**
-	 * Test method for {@link com.ddowney.plugins.tgen.Picker#Picker(com.atlassian.confluence.spaces.SpaceManager, com.atlassian.confluence.pages.PageManager, com.atlassian.confluence.pages.AttachmentManager)}.
+	 *  Test method for {@link com.ddowney.plugins.pdf2img.Picker#Picker(com.atlassian.confluence.spaces.SpaceManager, com.atlassian.confluence.pages.PageManager, com.atlassian.confluence.pages.AttachmentManager)}.
 	 */
 	@Test
 	public void testPicker() {
@@ -195,7 +195,7 @@ public class PickerTest {
 	}
 
 	/**
-	 * Test method for {@link com.ddowney.plugins.tgen.Picker#splitName(java.lang.String)}.
+	 *  Test method for {@link com.ddowney.plugins.pdf2img.Picker#splitName(java.lang.String)}.
 	 */
 	@Test
 	public void testSplitName() {
@@ -207,7 +207,7 @@ public class PickerTest {
 	}
 
 	/**
-	 * Test method for {@link com.ddowney.plugins.tgen.Picker#getAllSpaces()}.
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getAllSpaces()}.
 	 */
 	@Test
 	public void testGetAllSpaces() {
@@ -218,7 +218,7 @@ public class PickerTest {
 	}
 	
 	/**
-	 * 
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getSpaceByName(String, List)}.
 	 */
 	@Test
 	public void testGetSpaceByName(){
@@ -230,7 +230,7 @@ public class PickerTest {
 	}
 
 	/**
-	 * Test method for {@link com.ddowney.plugins.tgen.Picker#getAllPages(java.util.List)}.
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getAllPages(java.util.List)}.
 	 */
 	@Test
 	public void testGetAllPages() {
@@ -247,7 +247,7 @@ public class PickerTest {
 	}
 	
 	/**
-	 * 
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getCurrSpacePages(Space)}.
 	 */
 	@Test
 	public void testGetCurrSpacePages(){
@@ -266,7 +266,7 @@ public class PickerTest {
 	}
 
 	/**
-	 * Test method for {@link com.ddowney.plugins.tgen.Picker#getAllAttachments(java.util.Map)}.
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getAllAttachments(java.util.Map)}.
 	 */
 	@Test
 	public void testGetAllAttachments() {
@@ -276,7 +276,7 @@ public class PickerTest {
 	}
 	
 	/**
-	 * 
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getAttachmentsInCurrSpace(List)}.
 	 */
 	@Test
 	public void testGetAttachmentsInCurrSpace(){
@@ -286,7 +286,7 @@ public class PickerTest {
 	}
 
 	/**
-	 * Test method for {@link com.ddowney.plugins.tgen.Picker#convert(java.util.Map, double)}.
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#convert(java.util.Map, double)}.
 	 * This test will work if the createImage method in the Generator class works.
 	 * @throws AttachmentDataExistsException 
 	 * @throws IOException 
@@ -300,7 +300,7 @@ public class PickerTest {
 	
 	/**
 	 * @throws FileNotFoundException 
-	 * 
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getWordData()}.
 	 */
 	@Test
 	public void testGetWordData() throws FileNotFoundException{
@@ -339,25 +339,85 @@ public class PickerTest {
 	}
 	
 	/**
-	 * 
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getPptData()}.
 	 */
 	@Test
 	public void testGetPptData(){
-		fail("Not yet implemented");
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
+		InputStream in = null;
+		OutputStream out = null;
+		File file = new File("C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\ppt.png");
+		try{
+			in = picker.getPptData();
+			out = new FileOutputStream(file);
+			int read = 0;
+			byte[] bytes = new byte[1024];
+			
+			while((read = in.read(bytes)) != -1 ){
+				out.write(bytes, 0, read);
+			}
+		}catch(IOException e){
+			e.printStackTrace();
+		}finally{
+			if(in != null){
+				try{
+					in.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+			if(out != null){
+				try{
+					out.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+		}
+		assertNotNull("Returned null", file);
 	}
 	
 	/**
-	 * 
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getXlData()}.
 	 */
 	@Test
 	public void testGetXlData(){
-		fail("Not yet implemented");
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
+		InputStream in = null;
+		OutputStream out = null;
+		File file = new File("C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\xl.png");
+		try{
+			in = picker.getXlData();
+			out = new FileOutputStream(file);
+			int read = 0;
+			byte[] bytes = new byte[1024];
+			
+			while((read = in.read(bytes)) != -1 ){
+				out.write(bytes, 0, read);
+			}
+		}catch(IOException e){
+			e.printStackTrace();
+		}finally{
+			if(in != null){
+				try{
+					in.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+			if(out != null){
+				try{
+					out.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+		}
+		assertNotNull("Returned null", file);
 	}
 	
 	/**
-	 * 
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getWordImg(String)}.
 	 */
 	@Test
 	public void testGetWordImg(){
@@ -366,7 +426,7 @@ public class PickerTest {
 	}
 	
 	/**
-	 * 
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getPptImg(String)}.
 	 */
 	@Test
 	public void testGetPptImg(){
@@ -375,7 +435,7 @@ public class PickerTest {
 	}
 	
 	/**
-	 * 
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Picker#getXlImg(String)}.
 	 */
 	@Test
 	public void testGetXlImg(){
