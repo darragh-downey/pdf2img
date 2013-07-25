@@ -39,29 +39,52 @@ public class Convert {
 	private PageManager pageManager;
 	private AttachmentManager attachmentManager;
 	
+	/**
+	 * Constructor
+	 * @param spaceManager
+	 * @param pageManager
+	 * @param attachmentManager
+	 */
 	public Convert(SpaceManager spaceManager, PageManager pageManager, AttachmentManager attachmentManager){
 		this.spaceManager = spaceManager;
 		this.pageManager = pageManager;
 		this.attachmentManager = attachmentManager;
 	}
 	
+	/**
+	 * Compare the list of Attachments from Confluence to the list of filenames of
+	 * Attachments that didn't appear in the file.
+	 * @param attachMap The list of files, Map<Page, List<Attachment>>, obtained from Confluence.
+	 * @param diff The list of files that didn't appear in the previously converted file.
+	 * @return attachToCon A Map<Page, List<Attachment>> of files to be converted.
+	 */
 	public Map<Page, List<Attachment>> compareLists(Map<Page, List<Attachment>> attachMap, ArrayList<String> diff){
-		Map<Page, List<Attachment>> attachtocon = new HashMap<Page, List<Attachment>>();
+		Map<Page, List<Attachment>> attachToCon = new HashMap<Page, List<Attachment>>();
 		Iterator<Page> it = attachMap.keySet().iterator();
+		
 		while(it.hasNext()){
 			Page page = it.next();
 			List<Attachment> att = attachMap.get(page);
+			List<Attachment> nwatt = new ArrayList<Attachment>();
 			for(Attachment a : att){
 				for(String s : diff){
 					if(s.compareTo(a.getFileName()) == 0){
-						
+						nwatt.add(a);
 					}
 				}
 			}
+			attachToCon.put(page, nwatt);
 		}
-		return attachtocon;
+		return attachToCon;
 	}
 	
+	/**
+	 * 'Convert' all of the Attachments in the given attachMap, ie. if the attachment
+	 * is a pdf file copy & convert the front page to a png otherwise if it's a .doc/.docx/.ppt/.pptx/.xls/.xlsx
+	 * create an attachment with one of the resource images for those file types.
+	 * @param attachMap A Map<Page, List<Attachment>> of files to be converted.
+	 * @return
+	 */
 	public boolean conversion(Map<Page, List<Attachment>> attachMap){
 		Generator gen = new Generator(attachmentManager);
 		Picker pick = new Picker(spaceManager, pageManager, attachmentManager);
@@ -126,7 +149,10 @@ public class Convert {
 					}
 					page.addAttachment(attach);
 					wrt.setAttachments(a.getFileName());
-					
+					if(attach.getContent() != page){
+						cLog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
+						return false;
+					}
 				}else if(a.getFileExtension().contains("ppt") || a.getFileExtension().contains("pptx")){
 					try {
 						attach = pick.getPptImg(a.getFileName());
@@ -152,7 +178,10 @@ public class Convert {
 					}
 					page.addAttachment(attach);
 					wrt.setAttachments(a.getFileName());
-					
+					if(attach.getContent() != page){
+						cLog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
+						return false;
+					}
 				}else if(a.getFileExtension().contains("xls") || a.getFileExtension().contains("xlsx")){
 					try {
 						attach = pick.getXlImg(a.getFileName());
@@ -178,9 +207,14 @@ public class Convert {
 					}
 					page.addAttachment(attach);
 					wrt.setAttachments(a.getFileName());
+					if(attach.getContent() != page){
+						cLog.error("Failed to attach %s to %s", a.getFileName(), page.getTitle());
+						return false;
+					}
 				}
 			}
 		}
 		return true;
 	}
+	
 }

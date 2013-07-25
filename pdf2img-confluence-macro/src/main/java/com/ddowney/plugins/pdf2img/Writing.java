@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+//import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,13 +24,16 @@ import org.apache.logging.log4j.Logger;
 public class Writing{
 
 	private Logger wLog = LogManager.getLogger(Writing.class.getName());
-	private final static Charset ENCODING = StandardCharsets.UTF_8;
+	//private final static Charset ENCODING = StandardCharsets.UTF_8;
 	private Path path;
 	//private String uri = "test_Converted-files.txt";
 	private ClassLoader loader = Thread.currentThread().getContextClassLoader();
 	
 	private ArrayList<String> writeTo;
 	
+	/**
+	 * Constructor
+	 */
 	public Writing(){
 	}
 	
