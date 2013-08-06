@@ -55,6 +55,12 @@
 		<artifactId>gson</artifactId>
 		<version>2.2.4</version>
 	  </dependency>            
+	  <dependency>
+		 <groupId>jmagick</groupId>
+		 <artifactId>jmagick</artifactId>
+		 <version>6.6.9</version>
+	  </dependency>
+            
             
         <dependency>
             <groupId>com.atlassian.confluence</groupId>

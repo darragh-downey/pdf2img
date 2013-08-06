@@ -3,9 +3,11 @@ package com.ddowney.plugins.pdf2img;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 //import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,6 +16,10 @@ import javax.imageio.ImageIO;
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
 import com.atlassian.confluence.pages.AttachmentManager;
+
+import magick.ImageInfo;
+import magick.MagickException;
+import magick.MagickImage;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -121,7 +127,6 @@ public class Generator {
 	 */
 	public Attachment createImage(InputStream in, String name) throws IOException, AttachmentDataExistsException 
     {
-			//dime = dimensions;
             PDDocument document = null; 
             Attachment attachment = null;
             File img = null;
@@ -177,4 +182,50 @@ public class Generator {
             }
             return attachment;
         }
+	
+	public Attachment createImageMagick(InputStream in, String name){
+		ImageInfo info = null;
+		MagickImage image = null;
+		
+		try{
+			info = new ImageInfo(InputStreamToFile(in, name).getAbsolutePath());
+			image = new MagickImage(info);
+		} catch (MagickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return attachment; 
+	}
+	
+	public File InputStreamToFile(InputStream in, String name){
+		OutputStream out = null;
+		File file = new File(name);
+		try{
+			out = new FileOutputStream(file);
+			int read = 0;
+			byte[] bytes = new byte[1024];
+			while((read = in.read(bytes)) != -1){
+				out.write(bytes, 0, read);
+			}
+		}catch(IOException e){
+			e.printStackTrace();
+		}finally{
+			if(in != null){
+				try{
+					in.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+			if(out != null){
+				try{
+					out.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+		}
+		return file;
+	}
+	
 }

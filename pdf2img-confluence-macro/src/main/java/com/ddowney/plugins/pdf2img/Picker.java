@@ -92,7 +92,7 @@ public class Picker {
 	
 	/**
 	 * Get all the pages that are in all of the spaces in the List<Space> spaces.
-	 * @param spaces A List<Space> containing all of Confluences spaces.
+	 * @param spaces A List<Space> containing all of the spaces in Confluence.
 	 * @return pages A Map<Space, List<Page>> that contains spaces as keys and all the pages
 	 * associated with that space as the value.
 	 */
