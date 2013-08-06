@@ -190,6 +190,8 @@ public class Generator {
 		try{
 			info = new ImageInfo(InputStreamToFile(in, name).getAbsolutePath());
 			image = new MagickImage(info);
+			
+			image.writeImage(info);
 		} catch (MagickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
