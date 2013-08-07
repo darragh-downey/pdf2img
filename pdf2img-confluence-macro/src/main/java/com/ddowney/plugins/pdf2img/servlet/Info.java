@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ddowney.plugins.pdf2img;
+package com.ddowney.plugins.pdf2img.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.PageManager;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.spaces.SpaceManager;
+import com.ddowney.plugins.pdf2img.Picker;
 import com.google.gson.Gson;
 /**
  * @author ddowney

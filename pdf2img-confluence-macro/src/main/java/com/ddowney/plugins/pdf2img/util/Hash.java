@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ddowney.plugins.pdf2img;
+package com.ddowney.plugins.pdf2img.util;
 
 import com.google.common.hash.*;
 /**

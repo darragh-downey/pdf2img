@@ -1,4 +1,4 @@
-package com.ddowney.plugins.pdf2img.jobs;
+package com.ddowney.plugins.pdf2img.job;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
