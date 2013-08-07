@@ -7,10 +7,19 @@
         <param name="plugin-logo">images/pluginLogo.png</param>
     </plugin-info>
     
-    <servlet name="Servlet" key="Servlet" class="com.ddowney.plugins.pdf2img.Servlet">
+    <!-- add our servlet module -->
+    <servlet name="Servlet" key="Servlet" class="com.ddowney.plugins.pdf2img.Info">
     	<description>Gets the necessary information for the jQuery / AJAX UI</description>
     	<url-pattern>/pdf2img-servlet</url-pattern>
     </servlet>
+    
+    <!-- job and trigger modules -->
+    <job key="genNewTumbs" name="Generate New Thumbnails" class="com.ddowney.plugins.pdf2img.Job"/>
+    <trigger key="" name="">
+    	<job key="genNewThumbs"/>
+    	<schedule cron-expression="0 * * * * ?"/>
+    	<managed editable="true" keepingHistory="true" canRunAdHoc="true" canDisable="true"/>
+    </trigger>
     
     <!-- add admin console screen(?)  -->
     <web-item key="conf-menu-item" name="XProduct Admin" section="system.admin/configuration" weight="10"> 

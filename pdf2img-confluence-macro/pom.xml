@@ -16,7 +16,7 @@
     <name>pdf2img-confluence-macro</name>
     <description>This is the com.ddowney.plugins.pdf2img:pdf2img-confluence-macro plugin for Atlassian Confluence which converts pdf pages to either jpg or png format.</description>
     <packaging>atlassian-plugin</packaging>
-
+    
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -56,11 +56,10 @@
 		<version>2.2.4</version>
 	  </dependency>            
 	  <dependency>
-		 <groupId>jmagick</groupId>
-		 <artifactId>jmagick</artifactId>
-		 <version>6.6.9</version>
-	  </dependency>
-            
+    	<groupId>org.quartz-scheduler</groupId>
+    	<artifactId>quartz</artifactId>
+      	<version>2.2.0</version>
+	  </dependency>            
             
         <dependency>
             <groupId>com.atlassian.confluence</groupId>
@@ -189,7 +188,4 @@
         <plugin.testrunner.version>1.1</plugin.testrunner.version>
     </properties>
     
-    
-    
-
 </project>
