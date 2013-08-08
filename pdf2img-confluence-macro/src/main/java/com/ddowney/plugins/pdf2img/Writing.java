@@ -9,13 +9,14 @@ import java.net.URL;
 import java.nio.charset.Charset;
 //import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * @author ddowney
@@ -23,11 +24,11 @@ import org.apache.logging.log4j.Logger;
  */
 public class Writing{
 
-	private Logger wLog = LogManager.getLogger(Writing.class.getName());
+	private Logger wLog = Logger.getLogger(Writing.class.getName());
 	//private final static Charset ENCODING = StandardCharsets.UTF_8;
 	private Path path;
 	//private String uri = "test_Converted-files.txt";
-	private ClassLoader loader = Thread.currentThread().getContextClassLoader();
+	private ClassLoader loader;
 	
 	private ArrayList<String> writeTo;
 	
@@ -35,6 +36,8 @@ public class Writing{
 	 * Constructor
 	 */
 	public Writing(){
+		loader = Thread.currentThread().getContextClassLoader();
+		writeTo = new ArrayList<String>();
 	}
 	
 	/**
@@ -46,14 +49,12 @@ public class Writing{
 		try{
 			if(!fileExists(uri)){
 				Files.createFile(path);
-				wLog.info("Created file tracker.", path);
+				wLog.info(String.format("Created file tracker %s", path));
 			}
 		}catch(FileAlreadyExistsException e){
 			wLog.error("File already exists", e);
-			wLog.catching(e);
 		}catch(IOException e){
 			wLog.error("IO error", e);
-			wLog.catching(e);
 		}
 	}
 	
@@ -70,50 +71,58 @@ public class Writing{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			wLog.error("URI Syntax Exception");
-			wLog.catching(e);
 		}
 		return path;
 	}
 	
 	/**
 	 * Checks to see if the file already exists.
+	 * @param uri
 	 * @return boolean True for it exists, False otherwise.
 	 */
 	public boolean fileExists(String uri){ 
 		Path p = getFile(uri); 
 		if(p.toFile().exists()){
-			wLog.info("File exists", p);
+			wLog.info(String.format("File exists %s", p.toString()));
 			return true;
 		}
-		wLog.info("File doesn't exist", p);
+		wLog.info(String.format("File doesn't exist %s", p.toString()));
 		return false;
 	}
 
+	/**
+	 * Check if we can write to the file.
+	 * @param uri
+	 * @return boolean True if we can write, false otherwise.
+	 */
+	public boolean canWrite(String uri){
+		Path p = getFile(uri);
+		if(p.toFile().canWrite()){
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Write to the file, the filenames of the converted attachments.
 	 * @param lines ArrayList<String> The filenames to write.
 	 * @param uri String The file within the classpath to write to.
 	 */
 	public void writeFile(ArrayList<String> lines, String uri) {
-		path = getFile(uri); 
+		path = getFile(uri);
 		Charset charset = Charset.defaultCharset();
 		BufferedWriter bwriter = null;
 		try{
-			bwriter = Files.newBufferedWriter(path, charset);
+			bwriter = Files.newBufferedWriter(path, charset, StandardOpenOption.APPEND);
 			for(String line : lines){
 				bwriter.write(line, 0, line.length());
 				bwriter.newLine();
-				bwriter.flush();
 			}
-		}catch(IOException e){
-			wLog.error("IOException ", e);
-			wLog.catching(e);
-		}catch(UnsupportedOperationException e){
+			bwriter.flush();
+		}catch(IOException e | UnsupportedOperationException e | SecurityException e){
+			wLog.error("Exception ", e);
+		}catch(Exception e){
 			wLog.error("Unsupported Operation Exception", e);
-			wLog.catching(e);
-		}catch(SecurityException e){
-			wLog.error("Security Exception", e);
-			wLog.catching(e);
 		}finally{
 			if(bwriter != null){
 				try {
@@ -121,7 +130,6 @@ public class Writing{
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					wLog.error("IO Exception", e);
-					wLog.catching(e);
 				}	
 			}
 		}

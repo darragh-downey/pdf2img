@@ -12,8 +12,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -22,7 +21,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class Reading{
 	
-	private Logger rLog = LogManager.getLogger(Reading.class.getName());
+	private Logger rLog = Logger.getLogger(Reading.class.getName());
 	private Path path; 
 	private ArrayList<String> tbcList = new ArrayList<String>();
 	private final static Charset ENCODING = StandardCharsets.UTF_8;

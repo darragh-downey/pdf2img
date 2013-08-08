@@ -6,15 +6,19 @@ package ut.com.ddowney.plugins.pdf2img;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import org.apache.log4j.helpers.Loader;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.Page;
 import com.ddowney.plugins.pdf2img.Writing;
@@ -26,10 +30,12 @@ import com.ddowney.plugins.pdf2img.Writing;
 public class WritingTest {
 
 	private Writing writing;
-	private String uri = "test_Converted-files.txt";
+	private String uri = "monitoring/test_Convertedfiles.txt";
 	//private String uri_two = "C:\\Documents and Settings\\ddowney\\git\\pdf2img_repo\\pdf2img-confluence-macro\\src\\main\\resources\\test_Converted-files.txt";
-	private File file = new File(uri);
-	private Path path = file.toPath();
+	private File file;
+	private Path path;
+	private ClassLoader loader;
+	private URL url;
 	//private Path path = Paths.get(uri);
 	
 	private static Page APG = new Page();
@@ -67,7 +73,10 @@ public class WritingTest {
 	@Before
 	public void setUp() throws Exception {
 		writing = new Writing();
-		writeTo = new ArrayList<String>();
+		loader = Thread.currentThread().getContextClassLoader();
+		url = loader.getResource(uri);
+		path = Paths.get(url.toURI());
+		file = path.toFile();
 	}
 
 	/**
@@ -75,7 +84,7 @@ public class WritingTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
-		writeTo.clear();
+		
 	}
 
 	/**
@@ -89,11 +98,12 @@ public class WritingTest {
 	/**
 	 * Test method for {@link com.ddowney.plugins.pdf2img.Writing#createFile()}.
 	 * @param writing 
+	 * @throws URISyntaxException 
 	 */
 	@Test
-	public void testCreateFile() {
+	public void testCreateFile() throws URISyntaxException {
 		writing.createFile(uri);
-		Path p = Paths.get(uri);
+		Path p = Paths.get(url.toURI());
 		assertEquals("File doesn't exist...", path.toFile(), p.toFile());
 		assertNotNull("The file was not created...", p.toFile());
 	}
@@ -104,6 +114,14 @@ public class WritingTest {
 	@Test
 	public void testFileExists() {
 		assertTrue("File doesn't exist...", writing.fileExists(uri));
+	}
+	
+	/**
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Writing#canWrite(String)}.
+	 */
+	@Test
+	public void testCanWrite(){
+		assertTrue("Don't have permission to write to the file", writing.canWrite(uri));
 	}
 
 	/**
@@ -116,7 +134,8 @@ public class WritingTest {
 		lines.add("fish.pdf");
 		lines.add("tree.pdf");
 		writing.writeFile(lines, uri);
-		assertNotNull("File is empty", file);
+		System.out.println(file.lastModified());
+		assertNotNull("File doesn't exist", file);
 	}
 
 	/**
@@ -135,27 +154,18 @@ public class WritingTest {
 
 	/**
 	 * Test method for {@link com.ddowney.plugins.pdf2img.Writing#setAttachments(java.lang.String, java.lang.String)}.
+	 * It also tests {@link com.ddowney.plugins.pdf2img.Writing#getLines()}.
 	 */
 	@Test
 	public void testSetAttachments() {
 		AAT.setFileName("Pinochio.pdf");
 		BAT.setFileName("Moby_Dick.pdf");
 		CAT.setFileName("The_Good,The_Bad_And_The_Ugly.pdf");
-		
-		AAAT.setFileName("Pinochio.png");
-		BBAT.setFileName("Moby_Dick.png");
-		CCAT.setFileName("The_Good,The_Bad_And_The_Ugly.pdf");
+
 		writing.setAttachments(AAT.getFileName());
 		writing.setAttachments(BAT.getFileName());
 		writing.setAttachments(CAT.getFileName());
 		assertNotNull("Didn't add any of the filenames to the list", writing.getLines());
 	}
 	
-	/**
-	 * Test method for {@link com.ddowney.plugins.pdf2img.Writing#getLines()}. 
-	 */
-	public void testGetLines(){
-		fail("Not yet implemented");
-	}
-
 }

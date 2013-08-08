@@ -12,8 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.apache.wink.common.internal.utils.FileLoader;
 
 import com.atlassian.confluence.pages.Attachment;
@@ -23,7 +22,6 @@ import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.PageManager;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.spaces.SpaceManager;
-
 /*
  * This class deals with selecting the attachments for conversion.
  * It takes user input, which involves selecting the space, page(s) and attachments.
@@ -33,7 +31,7 @@ import com.atlassian.confluence.spaces.SpaceManager;
  */
 public class Picker {
 
-	private final static Logger pickLog = LogManager.getLogger(Picker.class.getName());
+	private final static Logger pickLog = Logger.getLogger(Picker.class.getName());
 	private PageManager pageManager;
 	private AttachmentManager attachmentManager;
 	private SpaceManager spaceManager;
@@ -102,7 +100,7 @@ public class Picker {
     	for(Space s : spaces){
     		List<Page> p = pageManager.getPages(s, true);
     		pages.put(s, p);
-    		pickLog.info("Added " + s.getName() + " and list of pages p " + p + " to the Map pages.");
+    		pickLog.info(String.format("Added %s and list of pages %s to the Map pages.", s.getName(), p.toString()));
     	}
     	return pages;
     }

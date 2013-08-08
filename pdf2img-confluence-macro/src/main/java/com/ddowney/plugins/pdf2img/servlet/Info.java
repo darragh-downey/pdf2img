@@ -4,18 +4,12 @@
 package com.ddowney.plugins.pdf2img.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-
-
-
-
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +28,10 @@ import com.google.gson.Gson;
  */
 public class Info extends HttpServlet{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7995054178717108691L;
 	private SpaceManager spaceManager;
 	private PageManager pageManager;
 	private AttachmentManager attachmentManager;
@@ -112,6 +110,7 @@ public class Info extends HttpServlet{
 		String key = spaceKey.next();
 		Space space = spaceManager.getSpace(key);
 		List<Page> pgs = p.getCurrSpacePages(space);
+		
 		for(Page pg : pgs){
 			pages.put(pg.getTitle(), pg.getId());
 		}
@@ -146,7 +145,7 @@ public class Info extends HttpServlet{
 	
 	/**
 	 * 
-	 * @return
+	 * @return pages
 	 */
 	public Map<String, Long> getAllPages(){
 		return pages;

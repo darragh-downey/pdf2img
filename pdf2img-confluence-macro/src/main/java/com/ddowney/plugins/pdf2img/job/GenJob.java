@@ -4,13 +4,15 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class GenJob implements Job {
+import com.atlassian.quartz.jobs.AbstractJob;
+
+public class GenJob extends AbstractJob {
 
 	@Override
-	public void execute(JobExecutionContext context)
+	public void doExecute(JobExecutionContext arg0)
 			throws JobExecutionException {
 		// TODO Auto-generated method stub
-
+		System.out.println("ouch...");
 	}
 
 }

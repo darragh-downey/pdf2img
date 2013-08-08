@@ -16,14 +16,26 @@ public class HelloWorldJob {
 		// TODO Auto-generated method stub
 		JobDetail job = JobBuilder.newJob(ThumbGen.class).withIdentity("dummyJobName", "group1").build();
 		
+		JobDetail j = JobBuilder.newJob(GenJob.class).withIdentity("GenJob", "genjobGroup").build();
+		
 		Trigger trigger = TriggerBuilder.newTrigger()
 				.withIdentity("dummyTriggerName", "group1")
 				.withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
 				.build();
 		
+		Trigger t = TriggerBuilder.newTrigger()
+					.withIdentity("GenJob", "genjobGroup")
+					.withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
+					.build();
+		
 		Scheduler scheduler = new StdSchedulerFactory().getScheduler();
+		Scheduler s = new StdSchedulerFactory().getScheduler();
+		
 		scheduler.start();
+		s.start();
+		
 		scheduler.scheduleJob(job, trigger);
+		s.scheduleJob(j, t);
 	}
 
 }
