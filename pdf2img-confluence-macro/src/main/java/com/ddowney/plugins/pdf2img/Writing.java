@@ -7,14 +7,16 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-//import java.nio.charset.StandardCharsets;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -25,19 +27,18 @@ import org.apache.log4j.Logger;
 public class Writing{
 
 	private Logger wLog = Logger.getLogger(Writing.class.getName());
-	//private final static Charset ENCODING = StandardCharsets.UTF_8;
+	private final static Charset ENCODING = StandardCharsets.UTF_8;
 	private Path path;
 	//private String uri = "test_Converted-files.txt";
 	private ClassLoader loader;
-	
-	private ArrayList<String> writeTo;
+	private Map<String, ArrayList<String>> map;
 	
 	/**
 	 * Constructor
 	 */
 	public Writing(){
 		loader = Thread.currentThread().getContextClassLoader();
-		writeTo = new ArrayList<String>();
+		map = new HashMap<String, ArrayList<String>>();
 	}
 	
 	/**
@@ -52,9 +53,9 @@ public class Writing{
 				wLog.info(String.format("Created file tracker %s", path));
 			}
 		}catch(FileAlreadyExistsException e){
-			wLog.error("File already exists", e);
+			wLog.error(String.format("%s", e.toString()), e);
 		}catch(IOException e){
-			wLog.error("IO error", e);
+			wLog.error(String.format("%s", e.toString()), e);
 		}
 	}
 	
@@ -68,9 +69,8 @@ public class Writing{
 		try {
 			path = Paths.get(url.toURI());
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			wLog.error("URI Syntax Exception");
+			wLog.error(String.format("%s", e.toString()), e);
 		}
 		return path;
 	}
@@ -108,57 +108,71 @@ public class Writing{
 	 * @param lines ArrayList<String> The filenames to write.
 	 * @param uri String The file within the classpath to write to.
 	 */
-	public void writeFile(ArrayList<String> lines, String uri) {
+	public void writeFileBuff(String uri) {
 		path = getFile(uri);
+		map = getMap();
 		Charset charset = Charset.defaultCharset();
 		BufferedWriter bwriter = null;
+		Iterator<String> it = map.keySet().iterator();
 		try{
 			bwriter = Files.newBufferedWriter(path, charset, StandardOpenOption.APPEND);
-			for(String line : lines){
-				bwriter.write(line, 0, line.length());
+			while(it.hasNext()){
+				String pageName = it.next();
+				ArrayList<String> lines = map.get(pageName);
+				bwriter.write(pageName);
 				bwriter.newLine();
+				bwriter.newLine();
+				for(String line : lines){
+					bwriter.write(line, 0, line.length());
+					bwriter.newLine();
+				}
+				bwriter.newLine();
+				bwriter.flush();
 			}
-			bwriter.flush();
-		}catch(IOException e | UnsupportedOperationException e | SecurityException e){
-			wLog.error("Exception ", e);
+		}catch(IOException | UnsupportedOperationException | SecurityException e){
+			wLog.error(String.format("%s", e.toString()), e);
 		}catch(Exception e){
-			wLog.error("Unsupported Operation Exception", e);
+			wLog.error(String.format("%s", e.toString()), e);
 		}finally{
 			if(bwriter != null){
 				try {
 					bwriter.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					wLog.error("IO Exception", e);
+					wLog.error(String.format("%s", e.toString()), e);
 				}	
 			}
 		}
 	}
 	
 	/**
-	 * Get the title of the page with the attachments on it convert it to upper case
-	 * and surround with '*'. Add the new string to the ArrayList writeTo.
-	 * @param pageName The title of the Page with converted Attachments.
+	 * Write to the file the filenames of the converted attachments.
+	 * @param lines ArrayList<String> The filenames to write.
+	 * @param uri String The file within the classpath to write to.
 	 */
-	public void setPages(String pageName){
-			String pageUpper = "*** " + pageName.toUpperCase() + " ***";
-			writeTo.add(pageUpper);
+	public void writeFile(ArrayList<String> lines, String uri){
+		path = getFile(uri);
+		try {
+			Files.write(path, lines, ENCODING);
+		} catch (IOException e) {
+			wLog.error(String.format("%s", e.toString()), e);
+			e.printStackTrace();
+		}
 	}
 	
 	/**
-	 * Get the filenames of the origin file and the thumbnail file.
-	 * Stick them together and add the new string to the ArrayList writeTo.
-	 * @param origin The filename of the Attachment that was converted.
+	 * Add the page and file names to the Map for writing to the file.
+	 * @param pageName
+	 * @param fileNames
 	 */
-	public void setAttachments(String origin){
-			writeTo.add(origin);	
+	public void setMap(String pageName, ArrayList<String> fileNames){
+		map.put(pageName, fileNames);
 	}
 	
 	/**
-	 * Just return the ArrayList with all of the lines to be written to the file in it.
-	 * @return writeTo The Page titles and Attachment filenames to be written to the file.
+	 * Get the Map containing the page/file names. 
+	 * @return map
 	 */
-	public ArrayList<String> getLines(){
-		return writeTo;
+	private Map<String, ArrayList<String>> getMap(){
+		return map; 
 	}
 }

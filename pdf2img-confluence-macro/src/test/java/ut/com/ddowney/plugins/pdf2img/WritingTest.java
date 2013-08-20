@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import org.apache.log4j.helpers.Loader;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -45,12 +44,6 @@ public class WritingTest {
 	private static Attachment AAT = new Attachment();
 	private static Attachment BAT = new Attachment();
 	private static Attachment CAT = new Attachment();
-	
-	private static Attachment AAAT = new Attachment();
-	private static Attachment BBAT = new Attachment();
-	private static Attachment CCAT = new Attachment();
-	
-	private static ArrayList<String> writeTo;
 	
 	/**
 	 * @throws java.lang.Exception

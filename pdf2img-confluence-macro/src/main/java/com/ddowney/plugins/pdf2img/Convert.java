@@ -87,16 +87,16 @@ public class Convert {
 		while(it.hasNext()){
 			Page page = it.next();
 			List<Attachment> attachments = attachMap.get(page);
-			wrt.setPages(page.getTitle());
 			//loop through the attachments attached to current page
+			ArrayList<String> filenames = new ArrayList<String>();
 			for(Attachment a : attachments){
 				Attachment attach = null;
 				if(a.getFileExtension().contains("pdf")){
 					InputStream in = attachmentManager.getAttachmentData(a); //get attachments data
 					try {
+						filenames.add(a.getFileName());
 						attach = gen.createImage(in, a.getFileName());
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						cLog.error("IO Exception");
 						cLog.trace("IO Exception trace", e);
 					}catch (AttachmentDataExistsException e) {
@@ -107,93 +107,80 @@ public class Convert {
 					try {
 						attachmentManager.saveAttachment(attach, null, in);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						cLog.error("IO Exception");
 						cLog.trace("IO Exception trace", e);
 					} //save attachment
 					page.addAttachment(attach); //attach saved attachment to current page
-					wrt.setAttachments(a.getFileName());
 					if(attach.getContent() != page){
 						cLog.error(String.format("Failed to attach %s to %s", attach, page));
 						return false;
 					}
 				}else if(a.getFileExtension().contains("doc") || a.getFileExtension().contains("docx")){
 					try {
+						filenames.add(a.getFileName());
 						attach = pick.getWordImg(a.getFileName());
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
 						cLog.error("File Not Found Exception", e);
 					} catch (AttachmentDataExistsException e) {
-						// TODO Auto-generated catch block
 						cLog.error("Attachment Data Exists Exception", e);
 					}				
 					try {
 						attachmentManager.saveAttachment(attach, null, pick.getWordData());
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
 						cLog.error("File Not Found Exception", e);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						cLog.error("IO Exception", e);
 					}
 					page.addAttachment(attach);
-					wrt.setAttachments(a.getFileName());
 					if(attach.getContent() != page){
 						cLog.error(String.format("Failed to attach %s to %s", a.getFileName(), page.getTitle()));
 						return false;
 					}
 				}else if(a.getFileExtension().contains("ppt") || a.getFileExtension().contains("pptx")){
 					try {
+						filenames.add(a.getFileName());
 						attach = pick.getPptImg(a.getFileName());
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
 						cLog.error("File Not Found Exception", e);
 					} catch (AttachmentDataExistsException e) {
-						// TODO Auto-generated catch block
 						cLog.error("Attachment Data Exists Exception", e);
 					}
 					try {
 						attachmentManager.saveAttachment(attach, null, pick.getPptData());
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
 						cLog.error("File Not Found Exception", e);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						cLog.error("IO Exception", e);
 					}
 					page.addAttachment(attach);
-					wrt.setAttachments(a.getFileName());
 					if(attach.getContent() != page){
 						cLog.error(String.format("Failed to attach %s to %s", a.getFileName(), page.getTitle()));
 						return false;
 					}
 				}else if(a.getFileExtension().contains("xls") || a.getFileExtension().contains("xlsx")){
 					try {
+						filenames.add(a.getFileName());
 						attach = pick.getXlImg(a.getFileName());
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
 						cLog.error("File Not Found Exception", e);
 					} catch (AttachmentDataExistsException e) {
-						// TODO Auto-generated catch block
 						cLog.error("Attachment Data Exists Exception", e);
 					}
 					try {
 						attachmentManager.saveAttachment(attach, null, pick.getXlData());
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
 						cLog.error("File Not Found Exception", e);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						cLog.error("IO Exception", e);
 					}
 					page.addAttachment(attach);
-					wrt.setAttachments(a.getFileName());
 					if(attach.getContent() != page){
 						cLog.error(String.format("Failed to attach %s to %s", a.getFileName(), page.getTitle()));
 						return false;
 					}
 				}
 			}
+			wrt.setMap(page.getTitle(), filenames);
 		}
 		return true;
 	}

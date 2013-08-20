@@ -1,6 +1,5 @@
 package com.ddowney.plugins.pdf2img;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,8 +12,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.apache.wink.common.internal.utils.FileLoader;
-
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.AttachmentDataExistsException;
 import com.atlassian.confluence.pages.AttachmentManager;

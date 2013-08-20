@@ -93,19 +93,6 @@ public class Generator {
 	public Attachment getAttachment(){
 		return attachment;
 	}
-	/*
-	private BufferedImage resampleOperation(BufferedImage buffIn, int width, int height){
-		ResampleOp resampleOp = new ResampleOp(width, height);
-		resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.Normal);
-		resampleOp.addProgressListener(new ProgressListener() {
-			public void notifyProgress(float fraction){
-				System.out.printf("Still working - %.2f percent %n", fraction*100);
-			}
-		});
-		BufferedImage buffOut = resampleOp.filter(buffIn, null);
-		return buffOut;
-	}
-	*/
 	
 	/**
 	 * This method converts a PDDocument page to a png/jpg. 
