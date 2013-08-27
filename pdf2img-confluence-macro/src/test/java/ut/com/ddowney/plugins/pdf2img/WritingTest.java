@@ -132,33 +132,11 @@ public class WritingTest {
 	}
 
 	/**
-	 * Test method for {@link com.ddowney.plugins.pdf2img.Writing#setPages(java.lang.String)}.
+	 * Test method for {@link com.ddowney.plugins.pdf2img.Writing#setMap(String, ArrayList)}.
 	 */
 	@Test
-	public void testSetPages() {
-		APG.setTitle("The Great Escape");
-		BPG.setTitle("Home Alone");
-		CPG.setTitle("Where Eagles Dare");
-		writing.setPages(APG.getTitle());
-		writing.setPages(BPG.getTitle());
-		writing.setPages(CPG.getTitle());
-		assertNotNull("Didn't add any of the page titles to the list", writing.getLines());
-	}
-
-	/**
-	 * Test method for {@link com.ddowney.plugins.pdf2img.Writing#setAttachments(java.lang.String, java.lang.String)}.
-	 * It also tests {@link com.ddowney.plugins.pdf2img.Writing#getLines()}.
-	 */
-	@Test
-	public void testSetAttachments() {
-		AAT.setFileName("Pinochio.pdf");
-		BAT.setFileName("Moby_Dick.pdf");
-		CAT.setFileName("The_Good,The_Bad_And_The_Ugly.pdf");
-
-		writing.setAttachments(AAT.getFileName());
-		writing.setAttachments(BAT.getFileName());
-		writing.setAttachments(CAT.getFileName());
-		assertNotNull("Didn't add any of the filenames to the list", writing.getLines());
+	public void testSetMap(){
+		
 	}
 	
 }

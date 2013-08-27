@@ -111,7 +111,7 @@ public class Picker {
 		List<Page> pages = pageManager.getPages(space, true);
 		return pages;
 	}
-	
+		
 	/**
 	 * Filter attachments by file extension. Get list of pdf files only.
 	 * @param att
@@ -177,6 +177,17 @@ public class Picker {
 		}
 		return attachments;
 	}	
+	
+	/**
+	 * Get all of the attachments for the selected page.
+	 * @param page 
+	 * @return attachments List<Attachment>
+	 */
+	public List<Attachment> getAttachmentsOnCurrPage(Page page){
+		List<Attachment> attachments = new ArrayList<Attachment>();
+		attachments = attachmentManager.getAttachments(page);
+		return attachments;
+	}
 	
 	/**
 	 * Get the image data of Word2007Logo.png and place in an InputStream.
