@@ -5,7 +5,6 @@ package com.ddowney.plugins.pdf2img.servlet;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.AttachmentManager;
 import com.atlassian.confluence.pages.Page;
@@ -53,11 +52,18 @@ public class DAO {
 	public ArrayList<String> getPages(String spacename){
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
 		ArrayList<String> pages = new ArrayList<String>();
-		Space space = picker.getSpaceByName(spacename, picker.getAllSpaces());
-		List<Page> pgs = picker.getCurrSpacePages(space);
-		pages.add("All");
-		for(Page p : pgs){
-			pages.add(p.getTitle());
+		if(spacename.equalsIgnoreCase("All")){
+			//get all pages across all spaces...
+			//call a get all attachments method here
+			pages.add("All");
+		}else{
+			//get an individual spaces list of pages
+			Space space = picker.getSpaceByName(spacename, picker.getAllSpaces());
+			List<Page> pgs = picker.getPagesInCurrSpace(space);
+			pages.add("All");
+			for(Page p : pgs){
+				pages.add(p.getTitle());
+			}
 		}
 		return pages;
 	}
@@ -71,28 +77,30 @@ public class DAO {
 	public ArrayList<String> getAttachments(String pagename, String spacename){
 		picker = new Picker(spaceManager, pageManager, attachmentManager);
 		ArrayList<String> attachments = new ArrayList<String>();
-		Space space = picker.getSpaceByName(spacename, picker.getAllSpaces());
-		List<Page> pages = picker.getCurrSpacePages(space);
-		Page page = null;
-		
-		for(Page p : pages){
-			if(p.getTitle().equalsIgnoreCase(pagename)){
-				page = p;
+		if(spacename.equalsIgnoreCase("All") && pagename.equalsIgnoreCase("All")){
+			//convert all attachments
+			attachments.add("All");
+		}else if(!(spacename.equalsIgnoreCase("All")) && pagename.equalsIgnoreCase("All")){
+			//convert all attachments attached to that page
+			Space space = picker.getSpaceByName(spacename, picker.getAllSpaces());
+			attachments.add("All");
+			for(Page p : picker.getPagesInCurrSpace(space)){
+				List<Attachment> att = picker.getAttachmentsOnCurrPage(p);
+				for(Attachment a : att){
+					attachments.add(a.getFileName());
+				}
 			}
-		}
-		List<Attachment> att = picker.getAttachmentsOnCurrPage(page);
-		attachments.add("All");
-		for(Attachment a : att){
-			attachments.add(a.getFileName());
+		}else if(!(spacename.equalsIgnoreCase("All") && pagename.equalsIgnoreCase("All"))){
+			//convert a select few (one -> max - 1) attachments
+			Space space = picker.getSpaceByName(spacename, picker.getAllSpaces());
+			Page page = picker.getPageByTitle(space.getKey(), pagename);
+			List<Attachment> att = picker.getAttachmentsOnCurrPage(page);
+			attachments.add("All");
+			for(Attachment a : att){
+				attachments.add(a.getFileName());
+			}
 		}
 		return attachments;
 	}
 	
-	public void checkSpaceDropdown(String result){
-		if(result.equalsIgnoreCase("All")){
-			//prepare all attachments
-		}else{
-			getPages(result);
-		}
-	}
 }

@@ -258,8 +258,8 @@ public class PickerTest {
 		when(pageManager.getPages(j, true)).thenReturn(getPages());
 		List<Page> pages = pageManager.getPages(j, true);
 		
-		assertEquals("Failed to get pages for chosen space", pages, picker.getCurrSpacePages(j));
-		assertNotNull("Returned null", picker.getCurrSpacePages(j));
+		assertEquals("Failed to get pages for chosen space", pages, picker.getPagesInCurrSpace(j));
+		assertNotNull("Returned null", picker.getPagesInCurrSpace(j));
 		
 		verify(spaceManager).getSpace("j");
 		verify(pageManager, times(3)).getPages(j, true);

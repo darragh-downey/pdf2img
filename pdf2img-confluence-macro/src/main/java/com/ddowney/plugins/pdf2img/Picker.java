@@ -107,11 +107,21 @@ public class Picker {
 	 * @param space The selected Space. 
 	 * @return pages The List<Page> for that Space.
 	 */
-	public List<Page> getCurrSpacePages(Space space){
+	public List<Page> getPagesInCurrSpace(Space space){
 		List<Page> pages = pageManager.getPages(space, true);
 		return pages;
 	}
-		
+	
+	/**
+	 * Get a page by it's spacekey and title.
+	 * @param spacekey
+	 * @param title
+	 * @return page
+	 */
+	public Page getPageByTitle(String spacekey, String title){
+		Page page = pageManager.getPage(spacekey, title);
+		return page;
+	}
 	/**
 	 * Filter attachments by file extension. Get list of pdf files only.
 	 * @param att

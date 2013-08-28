@@ -8,7 +8,10 @@
         </div><!-- .aui-navgroup-primary -->
         <div class="aui-navgroup-secondary">
             <ul class="aui-nav">
-                <li><a href="#hnavsettingsDropdown" class="aui-dropdown2-trigger" aria-owns="hnavsettings-dropdown" aria-haspopup="true"><span class="aui-icon aui-icon-small aui-iconfont-configure">Configure</span> <span class="aui-icon-dropdown"></span></a></li>
+                <li><a href="#hnavsettingsDropdown" class="aui-dropdown2-trigger" aria-owns="hnavsettings-dropdown" aria-haspopup="true">
+                        <span class="aui-icon aui-icon-small aui-iconfont-configure">Configure</span> 
+                        <span class="aui-icon-dropdown"></span>
+                </a></li>
             </ul>
         </div><!-- .aui-navgroup-secondary -->
     </div><!-- .aui-navgroup-inner -->
