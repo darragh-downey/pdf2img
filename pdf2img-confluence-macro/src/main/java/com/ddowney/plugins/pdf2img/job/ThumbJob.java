@@ -11,12 +11,20 @@ import org.quartz.JobExecutionException;
  * @author ddowney
  *
  */
-public class ThumbGen implements Job {
+public class ThumbJob implements Job {
 
+	//run thumbnail generator
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		// TODO Auto-generated method stub
 		System.out.println("Hello World");
+		//job start
+		//read txt file get attachment names + attached page ID
+		//search confluence for attachments + filter out the unsupported file types
+		//compare the two lists
+		//'convert' the unique attachments from the 'confluence' list
+		//write to the file the newly 'converted' attachment names.
+		//job done
 		
 		throw new JobExecutionException("Testing Exception");
 	}

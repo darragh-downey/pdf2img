@@ -25,11 +25,6 @@
             <scope>test</scope>
         </dependency>
         
-       <dependency>
-		<groupId>com.mortennobel</groupId>
-		<artifactId>java-image-scaling</artifactId>
-		<version>0.8.5</version>
-	   </dependency>
 	   <dependency>
 		  <groupId>org.apache.pdfbox</groupId>
 		  <artifactId>pdfbox</artifactId>
